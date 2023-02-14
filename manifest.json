@@ -4,7 +4,7 @@
     "manifest_version": 3,
     "action":{
         "default_popup": "./html/button.html",
-        "default_title": "Latest Covid Report"
+        "default_title": "Brewing Java"
     },
     "web_accessible_resources": [
      {
