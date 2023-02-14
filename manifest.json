@@ -3,25 +3,16 @@
     "version": "1.0.0",
     "manifest_version": 3,
     "action":{
-        "default_popup": "button.html",
+        "default_popup": "./html/button.html",
         "default_title": "Latest Covid Report"
-    }
-    ,
+    },
     "web_accessible_resources": [
-        {
-          "matches": ["<all_urls>"],
-          "css": ["button.css"],
-          "js": ["button.js"]
-        },
-        {
-          "resources": [
-            {
-              "id": "change-text",
-              "file": "button.html"
-            }
-          ]
-        }
+     {
+      "matches": ["<all_urls>"],
+      "resources": [
+        "./css/*",
+        "./js/*"
       ]
-      
-      
+     }
+    ]
 }
