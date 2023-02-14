@@ -1,5 +1,5 @@
 document.getElementById('play-game').addEventListener("click", function() { 
-    window.open("http://www.google.com/", "mywindow","location=1,toolbar=1,menubar=1,resizable=1,width=500,height=500");
+    window.open("../game/index.html", "mywindow","location=1,toolbar=1,menubar=1,resizable=1,width=1500,height=1000");
     document.getElementById('play-game').setAttribute('disabled','disabled');
     document.getElementById('activity').setAttribute('disabled','disabled');
     var property=document.getElementById('play-game');
@@ -9,7 +9,7 @@ document.getElementById('play-game').addEventListener("click", function() {
 });
 
 document.getElementById('activity').addEventListener("click", function() { 
-    window.open("http://www.youtube.com/", "mywindow","location=1,toolbar=1,menubar=1,resizable=1,width=500,height=500");
+    window.open("../api/bored.html", "mywindow","location=1,toolbar=1,menubar=1,resizable=1,width=1000,height=250");
     document.getElementById('play-game').setAttribute('disabled','disabled');
     document.getElementById('activity').setAttribute('disabled','disabled');
     var property=document.getElementById('play-game');
