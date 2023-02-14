@@ -1,0 +1,27 @@
+{
+    "name": "Button Test",
+    "version": "1.0.0",
+    "manifest_version": 3,
+    "action":{
+        "default_popup": "button.html",
+        "default_title": "Latest Covid Report"
+    }
+    ,
+    "web_accessible_resources": [
+        {
+          "matches": ["<all_urls>"],
+          "css": ["button.css"],
+          "js": ["button.js"]
+        },
+        {
+          "resources": [
+            {
+              "id": "change-text",
+              "file": "button.html"
+            }
+          ]
+        }
+      ]
+      
+      
+}
