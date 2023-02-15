@@ -1,4 +1,4 @@
-# Pepe's Positive Pupip Popup
+# Pepe's Positive Pupil Popup
 
 ### Brewing Java™
 
