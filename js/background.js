@@ -1,11 +1,9 @@
-chrome.browserAction.onClicked.addListener(function(tab) {
-    chrome.tabs.executeScript({
-        file: 'button.js'
-    });
-    chrome.tabs.insertCSS({
-        file: 'button.css'
-    });
-    chrome.tabs.executeScript({
-        code: "document.body.insertAdjacentHTML('beforeend', '<div id=\"change-text\">hi</div>');"
-    });
-});
+chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
+    console.log("Message received: ", message);
+    if (message.action === "openPopup") {
+      chrome.action.openPopup();
+      sendResponse({ message: "Popup opened" });
+    }
+  });
+  
+  
