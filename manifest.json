@@ -3,10 +3,10 @@
     "version": "1.0.0",
     "manifest_version": 3,
     "background": {
-        "service_worker": "js/background.js"
+        "service_worker": "./src/chrome/background.js"
     },
     "action":{
-        "default_popup": "./html/button.html",
+        "default_popup": "./src/home/index.html",
         "default_title": "Brewing Java"
     },
 
@@ -16,15 +16,16 @@
     "content_scripts": [
         {
             "matches": ["https://umich.instructure.com/*"],
-            "js": ["js/content.js"]
+            "js": ["./src/chrome/content.js"]
         }
     ],
     "web_accessible_resources": [
         {
             "matches": ["<all_urls>"],
             "resources": [
-                "./css/*",
-                "./js/*"
+                "./src/bored-api/*",
+                "./src/home/*",
+                "./src/game/*"
             ]
         }
     ]
