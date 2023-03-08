@@ -68,7 +68,7 @@ setInterval(() => {
     }
 
 
-}, 5000);
+}, 1000);
 
 
 // chrome.runtime.onMessage.addListener(
