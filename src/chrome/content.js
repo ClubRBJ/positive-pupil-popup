@@ -1,48 +1,49 @@
-/**
- * The `submitDate` variable holds the date and time that the assignment was submitted.
- * The `dueDate` variable holds the date and time that the assignment is due.
- * The `curTime` variable holds the current date and time.
- * The `isSubmitted` variable holds a boolean value indicating whether the assignment has been submitted.
- */
-let submitDate;
-let dueDate;
-let curTime;
-let isSubmitted = false;
+
+
+// /**
+//  * Set this to `true` to enable console logs for debugging purposes.
+//  */
+ const DEBUG_MODE = false;
+
+
+SHOWING_POPUP = false;
 
 /**
- * Set this to `true` to enable console logs for debugging purposes.
+ *  This function will determine if a valid submit occured
  */
-const DEBUG_MODE = false;
+function validSubmit() {
 
-/**
- * This function is called every 3 seconds to update the values of `submitDate`, `dueDate`,
- * `curTime`, and `isSubmitted` based on the current HTML elements on the page.
- */
-setInterval(() => {
     // Get the time elements from the HTML.
     const timeElements = document.getElementsByTagName('time');
     
-    // Set the `dueDate` variable to the value of the first time element.
-    dueDate = timeElements[0].attributes.datetime.nodeValue;
+    // Due date
+    const dueDate = timeElements[0].attributes.datetime.nodeValue;
     if (DEBUG_MODE) console.log("Due Date: ", dueDate);
-
-    // Set the `submitDate` variable to the value of the second time element.
-    submitDate = timeElements[1].attributes.datetime.nodeValue;
+    // Submit date
+    const submitDate = timeElements[1].attributes.datetime.nodeValue;
     if (DEBUG_MODE) console.log("Submit Date: ", submitDate);
-
-    // Set the `isSubmitted` variable to `true` if the second time element's inner text starts with "Submitted".
-    isSubmitted = (timeElements[1].firstChild.innerText.startsWith('Submitted'));
-    
-    // Set the `curTime` variable to the current date and time.
-    curTime = new Date().toISOString();
+    // Current time
+    const curTime = new Date().toISOString();
     if (DEBUG_MODE) console.log("Current Time and Date: ", curTime);
-}, 3000);
 
+
+    // Determine if the assignment was submitted after the due date
+    isSubmitted = timeElements[1].firstChild.innerText[0] === "S";
+    
+    // TODO: more checks to determine if a valid submit occured
+
+    // Return the boolean value of `isSubmitted`
+    return isSubmitted;
+};
 
 
 setInterval(() => {
     // Automatic popup handling
-    isSubmitted = (isSubmitted === "S");
+
+    // Check if the assignment was submitted
+    const isSubmitted = validSubmit();
+
+
     console.log("Boolean Submitted ", isSubmitted);
 
     // first thing to fix is get the popup to activate once isSubmitted is true
@@ -50,8 +51,34 @@ setInterval(() => {
     if (isSubmitted) {
         // Send a message to the background script to open the popup
         chrome.runtime.sendMessage({action: "openPopup"});
+        // Catch and log the error if the popup fails to open
+        if (SHOWING_POPUP === true) {
+            return;
+        }
+        try {
+            (async () => {
+                const response = await chrome.runtime.sendMessage({data: "openTab"});
+                // do something with response here, not outside the function
+                console.log(response);
+                SHOWING_POPUP = true;
+            })();
+        } catch (error) {
+            console.error('Failed to open popup:', error);
+        }
     }
 
 
 }, 5000);
 
+
+// chrome.runtime.onMessage.addListener(
+//     function(request, sender, sendResponse) {
+//         console.log(sender.tab ?
+//                     "from a content script:" + sender.tab.url :
+//                     "from the Helloextension");
+//         // if request.data is not null, log it
+//         if (request.data) {
+//             console.log(request.data);
+//         }
+//     }
+// );

@@ -3,13 +3,14 @@
     "version": "1.0.0",
     "manifest_version": 3,
     "background": {
-        "service_worker": "./src/chrome/background.js"
+        "service_worker": "./src/chrome/background.js",
+        "type": "module"
     },
     "action":{
         "default_popup": "./src/home/index.html",
         "default_title": "Brewing Java"
     },
-
+    "permissions": [ "tabs" ],
     "host_permissions": [
         "https://umich.instructure.com/*"
     ],
