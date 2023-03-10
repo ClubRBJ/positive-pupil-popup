@@ -12,17 +12,15 @@ chrome.runtime.onMessage.addListener(
       chrome.tabs.create({url: url});
       sendResponse({data: 'created tab'});
     }
-    if (request.data === "closeTab") {
-      chrome.tabs.getCurrent(function(tab) {
-        chrome.tabs.remove(tab.id, function() { });
-      });
-      // chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-      //   var currTab = tabs[0];
-      //   if (currTab)  // Sanity check
-      //     chrome.tabs.
-      //  
-      // });
-    }
+    // if (request.data === "closeTab") {
+
+    //   chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+    //     var currTab = tabs[0];
+    //     if (currTab)  // Sanity check
+    //     chrome.tabs.remove(currTab, function() { });
+    
+    //   });
+    // }
     else {
       sendResponse({request});
     }

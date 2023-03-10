@@ -21,10 +21,14 @@ function disableButtons() {
  */
 function playGame() {
     // Open the game in a new window.
-    window.open("../game/index.html", "mywindow","location=1,toolbar=1,menubar=1,resizable=1,width=1500,height=1000");
+    let openWindow = window.open("../game/index.html", "mywindow","location=1,toolbar=1,menubar=1,resizable=1,width=1500,height=1000");
     
     // Disable the "play game" and "activity" buttons.
     disableButtons();
+
+    setTimeout(() => {
+        openWindow.close();
+    }, 5000);
 }
 
 /**
@@ -33,9 +37,13 @@ function playGame() {
  */
 function showBoredAPI() {
     // Open the "bored" API in a new window.
-    window.open("../bored-api/index.html", "mywindow","location=1,toolbar=1,menubar=1,resizable=1,width=1000,height=250");
+    let openWindow = window.open("../bored-api/index.html", "mywindow","location=1,toolbar=1,menubar=1,resizable=1,width=1000,height=250");
     // Disable the "play game" and "activity" buttons.
     disableButtons();
+
+    setTimeout(() => {
+        openWindow.close();
+    }, 5000);
 }
 
 // Add event listeners to the "play game" and "activity" buttons.
