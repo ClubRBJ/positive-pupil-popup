@@ -7,7 +7,7 @@
         "type": "module"
     },
     "action":{
-        "default_popup": "./src/home/index.html",
+        "default_popup": "./src/start.html",
         "default_title": "Brewing Java"
     },
     "permissions": [ "tabs" ],
