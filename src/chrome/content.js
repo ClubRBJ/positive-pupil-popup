@@ -3,7 +3,7 @@
 // /**
 //  * Set this to `true` to enable console logs for debugging purposes.
 //  */
- const DEBUG_MODE = true;
+const DEBUG_MODE = true;
 
 
 SHOWING_POPUP = false;
