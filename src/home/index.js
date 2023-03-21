@@ -28,7 +28,7 @@ function playGame() {
 
     setTimeout(() => {
         openWindow.close();
-    }, 5000);
+    }, timeLeft);
 }
 
 /**
@@ -43,9 +43,17 @@ function showBoredAPI() {
 
     setTimeout(() => {
         openWindow.close();
-    }, 5000);
+    }, timeLeft);
 }
 
 // Add event listeners to the "play game" and "activity" buttons.
+var timeLeft = 300000;
+setInterval(function () {timeLeft -= 1000}, 1000);
 document.getElementById(PLAY_GAME_BUTTON).addEventListener("click", playGame);
 document.getElementById(ACTIVITY_BUTTON).addEventListener("click", showBoredAPI);
+setTimeout(() => {
+    document.getElementById(PLAY_GAME_BUTTON).setAttribute('disabled', 'disabled');
+    document.getElementById(PLAY_GAME_BUTTON).style.backgroundColor = '#808080';
+    document.getElementById(ACTIVITY_BUTTON).setAttribute('disabled', 'disabled');
+    document.getElementById(ACTIVITY_BUTTON).style.backgroundColor = '#808080';
+}, 300000);
