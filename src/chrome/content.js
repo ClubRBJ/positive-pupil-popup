@@ -17,7 +17,7 @@ function validSubmit() {
     const timeElements = document.getElementsByTagName('time');
     
     // Due date
-    const dueDate = timeElements[0].attributes.datetime.nodeValue;
+    const dueDate = new Date(timeElements[0].attributes.datetime.nodeValue);
     if (DEBUG_MODE) console.log("Due Date: ", dueDate);
     // Submit date
     // this should be in a try block
@@ -40,6 +40,7 @@ function validSubmit() {
     const timeDifference = curTime - submitDate;
     if (DEBUG_MODE) console.log('Time difference: ', timeDifference);
 
+    // checks to make sure that the popup opens only within a 5 min timeframe when submited
     if (willOpen && timeDifference > 300000) {
         if (DEBUG_MODE) console.log('The time difference is more than 5 minutes.');
         willOpen = false;
@@ -47,6 +48,15 @@ function validSubmit() {
         if (DEBUG_MODE) console.log('The time difference is less than 5 minutes.');
     }
 
+    // checks to make sure that the popup does not activate for a late assignment 
+    // if curTime - dueDate is negative then the assignment was not submitted late. Otherwise it is.
+    if (willOpen && ((curTime - dueDate) > 0)) {
+        if (DEBUG_MODE) console.log('The Assignment is Late.');
+        willOpen = false;
+    } else {
+        if (DEBUG_MODE) console.log('The Assignment is On Time');
+    }
+    
     // Return the boolean value of `willOpen`
     return willOpen;
 };
