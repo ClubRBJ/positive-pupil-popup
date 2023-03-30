@@ -142,9 +142,10 @@ function gameOver() {
     $('#actual_game').hide();
     $('#main_menu').show(); // shows the same main menu background as in the start
     $('#main_buttons').hide(); // hides the beginning menu buttons 
-    $('.game-window').css({'background-image': 'url("./src/frontpage_background.jpg'}); 
+    $('.game-window').css({'background-image': 'url("./src/grass.gif'}); 
     $('#game_over_menu').show(); // will display the end game message
     $('#final_score').html(score);
+    $('#final_level').html(level);
   }, death_screen_rate);
 }
 
@@ -202,7 +203,7 @@ function startGame() {
 }
 
 function portalSpawn() {
-  onScreenPortal.html("<img class='game_object' src='src/port.gif'/>");
+  onScreenPortal.html("<img class='game_object' src='src/sheep.png'/>");
   onScreenPortal.css('left', getRandomNumber(0, 1218));
   onScreenPortal.css('top', getRandomNumber(0, 658));
 
@@ -232,7 +233,7 @@ function portalCollision() {
 }
 
 function shieldSpawn() {
-  onScreenShield.html("<img class='game_object' src='src/shield.gif'/>");
+  onScreenShield.html("<img class='game_object' src='src/red_cape.png'/>");
   onScreenShield.css('left', getRandomNumber(0, 1218));
   onScreenShield.css('top', getRandomNumber(0, 658));
 
@@ -298,10 +299,11 @@ function rocketMove() {
     rocket.css("left", newPosition);
 
     if (hasShield) {
-      rocket.attr("src", "src/player/player_shielded_left.gif");
+      rocket.attr("src", "src/player/cowboy_left_cape.png");
+      
     } 
     else {
-      rocket.attr("src", "src/player/player_left.gif");
+      rocket.attr("src", "src/player/cowboy_left.png");
     }
   }
   else if (UP) {
@@ -312,12 +314,12 @@ function rocketMove() {
     } 
     rocket.css("top", newPosition);
 
-    if (hasShield) {
-      rocket.attr("src","src/player/player_shielded_up.gif");
-    } 
-    else {
-      rocket.attr("src", "src/player/player_up.gif");
-    }
+    // if (hasShield) {
+    //   rocket.attr("src","src/player/player_shielded_up.gif");
+    // } 
+    // else {
+    //   rocket.attr("src", "src/player/player_up.gif");
+    // }
   }
   else if (RIGHT) {
     var newPosition = parseInt(rocket.css("left")) + PERSON_SPEED;
@@ -328,10 +330,10 @@ function rocketMove() {
     rocket.css("left", newPosition);
 
     if (hasShield) {
-      rocket.attr("src", "src/player/player_shielded_right.gif");
+      rocket.attr("src", "src/player/cowboy_right_cape.png");
     } 
     else {
-      rocket.attr("src", "src/player/player_right.gif");
+      rocket.attr("src", "src/player/cowboy_right.png");
     }
   }
   else if (DOWN) {
@@ -342,16 +344,19 @@ function rocketMove() {
     } 
     rocket.css("top", newPosition);
 
-    if (hasShield) {
-      rocket.attr("src", "src/player/player_shielded_down.gif");
-    } 
-    else {
-      rocket.attr("src", "src/player/player_down.gif");
-    }
+    // if (hasShield) {
+    //   rocket.attr("src", "src/player/player_shielded_down.gif");
+    // } 
+    // else {
+    //   rocket.attr("src", "src/player/player_down.gif");
+    // }
   } 
-  else {
-    rocket.attr("src", "src/player/player.gif");
-  }
+  // else {
+  //   if (hasShield) {
+  //     rocket.attr("src", "src/player/cowboy_left_cape.png");
+  //   } 
+  //   rocket.attr("src", "src/player/cowboy_left.png");
+  // }
 
 }
 
@@ -378,8 +383,13 @@ class Asteroid {
   constructor() {
       /*------------------------Public Member Variables------------------------*/
       // create a new Asteroid div and append it to DOM so it can be modified later
-      let objectString = "<div id = 'a-" + currentAsteroid + "' class = 'curAstroid' > <img src = 'src/asteroid.png'/></div>";
+      // let objectString = "<div id = 'a-" + currentAsteroid + "' class = 'curAstroid' > <img src = 'src/asteroid.png'/></div>";
+      // onScreenAsteroid.append(objectString);
+
+      let imageSource = Math.random() < 0.5 ? "src/running-bull-left.png" : "src/running-bull-right.png";
+      let objectString = "<div id='a-" + currentAsteroid + "'class = 'curAstroid' '><img src ='" + imageSource + "'/></div>";
       onScreenAsteroid.append(objectString);
+
       // select id of this Asteroid
       this.id = $('#a-' + currentAsteroid);
       currentAsteroid++; // ensure each Asteroid has its own id

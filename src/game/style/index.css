@@ -17,13 +17,15 @@ button {
     float: left;
     position: absolute;
     background-color: gainsboro;
-    background-image: url("../src/frontpage_background.jpg");
+    background-image: url("../src/grass.gif");
     background-size: 1280px 720px;
 }
 #actual_game {
     height: 720px;
     width: 1280px;
     background-color: white;
+    background-size: cover;
+    background-image: url("../src/grass.gif");
     z-index: 10;
     position: absolute;
     right: 0;
@@ -36,25 +38,25 @@ button {
     position: absolute;
     left: 960px;
     top: 0;
-    color: black;
+    color: white;
     z-index: 1;
 }
 #danger,
 #level,
 #scoreword {
     text-align: center;
-    font-size: 60px;
+    font-size: 30px;
 }
 #danger_num,
 #level_num,
 #score_num {
     text-align: center;
-    font-size: 40px;
-    color: darkblue;
+    font-size: 35px;
+    color: red;
 }
 #rocket_img {
     position: absolute;
-    width: 62px;
+    width: 30px;
     left: 600px;
     top: 300px;
     z-index: 9;
@@ -71,8 +73,8 @@ button {
 #curShield,
 .game_object {
     position: absolute;
-    width: 80px;
-    height: 80px;
+    width: 40px;
+    height: 40px;
 }
 .curAstroid img {
     position: relative;
@@ -103,13 +105,13 @@ button {
 /*  */
 #asteroid_left {
     height: 100px;
-    content: url("../src/asteroid.png");
+    content: url("../src/running-bull-right.png");
     float: left;
 }
 /*  */
 #asteroid_right {
     height: 100px;
-    content: url("../src/asteroid.png");
+    content: url("../src/running-bull-left.png");
     float: right;
 }
 /*  */

@@ -17,8 +17,8 @@
 
             <div id="game_over_menu">
                 <p>GAME OVER!</p>
-                <p>YOU HAVE TO FIX YOUR SPACESHIP!</p>
-                <p id="final_score"></p>
+                <p>You Managed to Save <span id="final_level"></span> Sheep</p>
+                <p>Final Score <span id="final_score"></span></p>
                 <button id="game_over_button">Start Over</button>
             </div>
             <div id="main_buttons">
@@ -68,18 +68,18 @@
         <!-- Tutorial -->
         <div id="tutorial">
             <h1 id="tutorial_title">
-                <b>How to play</b>
+                <b>The Bulls Have Escaped their Pen!!!</b>
             </h1>
             <p id="tutorial_text">
-                <b>Avoid</b> <em>asteroids</em>!
+                <b>Avoid</b> <em>the Charging Bulls</em>!
             </p>
-            <img id="tutorial_img" src=./src/asteroid.png>
+            <img id="tutorial_img" src=./src/running-bull-left.png>
 
             <p id="tutorial_text">
-                <b>Collect</b> <em>shields</em>! <b>Travel</b> through <em>portals</em> to the next level!
+                <b>Collect</b> the <em>Red Cape</em> to <b>Dodge</b> the <b>Bulls.</b> <b>Save</b> your <em>Sheep</em> to get to the next level!
             </p>
-            <img id="tutorial_img" src=./src/shield.gif> 
-            <img id="tutorial_img" src=./src/port.gif>
+            <img id="tutorial_img" src=./src/red_cape.png> 
+            <img id="tutorial_img" src=./src/sheep.png>
             <p id="tutorial_text">
                 <b>Gain</b> as many <em>points</em> as possible!
             </p>
@@ -107,7 +107,7 @@
                 <div id=danger>DANGER
                     <div id=danger_num></div>
                 </div>
-                <div id=level>LEVEL
+                <div id=level>SHEEP SAVED
                     <div id=level_num></div>
                 </div>
             </div>
