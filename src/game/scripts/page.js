@@ -58,9 +58,87 @@ var UP = false;
 var DOWN = false;
 var touched = false;
 
+
+// ==============================================
+// ============ Theme stuff =====================
+// ==============================================
+
+
+const themes = {
+  default: {
+    '--main-color': 'darkslateblue',
+    '--background-color': '#eee',
+    '--border-color': 'gainsboro',
+    '--game-background-color': 'gainsboro',
+    '--game-background-image': 'url("../src/grass.gif")',
+    '--font-color': 'white',
+    '--danger-color': 'red',
+    '--level-color': 'red',
+    '--score-color': 'red',
+    '--score-num-color': 'red',
+    '--button-background-color': 'darkslateblue',
+    '--button-border-color': 'black',
+    '--button-font-color': 'white',
+    '--settings-background-color': 'darkslateblue',
+    '--settings-border-color': 'white',
+    '--settings-font-color': 'white',
+    '--slider-background-color': '#d3d3d3',
+    '--slider-fill-color': 'opacity(0.7)',
+    '--game-over-background-color': 'darkslateblue',
+    '--game-over-color': 'white'
+  },
+  colorblind: {
+    '--main-color': '#f1c232',
+    '--background-color': '#fffacd',
+    '--border-color': 'darkkhaki',
+    '--game-background-color': '#fffacd',
+    '--game-background-image': 'url("../src/grass-still.png")',
+    '--font-color': 'black',
+    '--danger-color': 'black',
+    '--level-color': 'black',
+    '--score-color': 'black',
+    '--score-num-color': 'black',
+    '--button-background-color': '#f1c232',
+    '--button-border-color': 'black',
+    '--button-font-color': 'black',
+    '--settings-background-color': '#f1c232',
+    '--settings-border-color': 'black',
+    '--settings-font-color': 'black',
+    '--slider-background-color': '#d3d3d3',
+    '--slider-fill-color': 'opacity(0.7)',
+    '--game-over-background-color': '#f1c232',
+    '--game-over-color': 'black'
+  },
+  cool1: {
+    '--main-color': '#fc7f03',
+    '--background-color': '#f4f4f4',
+    '--border-color': '#000',
+    '--game-background-color': '#f4f4f4',
+    '--game-background-image': 'url("../src/arrowkeys.png")',
+    '--font-color': '#000',
+    '--danger-color': '#e41749',
+    '--level-color': '#d1197b',
+    '--score-color': '#42b5dd',
+    '--score-num-color': '#000',
+    '--button-background-color': '#fc7f03',
+    '--button-border-color': '#000',
+    '--button-font-color': '#000',
+    '--settings-background-color': '#fc7f03',
+    '--settings-border-color': '#000',
+    '--settings-font-color': '#000',
+    '--slider-background-color': '#d3d3d3',
+    '--slider-fill-color': 'opacity(0.7)',
+    '--game-over-background-color': '#fc7f03',
+    '--game-over-color': '#000'
+  },
+}
+
 // ==============================================
 // ============ Functional Code Here ============
 // ==============================================
+
+
+
 
 
 
@@ -82,12 +160,48 @@ $(document).ready(function () {
   document.getElementById('settings_menu').addEventListener("click", function() { 
     gameSettings(true);
   });
+  
   document.getElementById('settings_close_button').addEventListener("click", function() { 
     gameSettings(false);
   });
   document.getElementById('tutorial_button').addEventListener("click", beginGame);
   document.getElementById('game_over_button').addEventListener("click", gameRestart);
 
+  
+  
+  // ##########################################################
+  // Theme stuff
+  const themeNames = Object.keys(themes);
+  let currentThemeIndex = 0;
+
+  function setTheme(theme) {
+    const themeVars = themes[theme];
+    if (themeVars) {
+      Object.keys(themeVars).forEach(key => {
+        document.documentElement.style.setProperty(key, themeVars[key]);
+      });
+    } else {
+      // throw error and log it
+      throw new Error(`Theme ${theme} not found`);
+    }
+  }
+  
+  function updateCurrentTheme() {
+    const currentThemeSpan = document.getElementById('current_theme');
+    currentThemeSpan.innerText = `Current Theme: ${themeNames[currentThemeIndex].charAt(0).toUpperCase() + themeNames[currentThemeIndex].slice(1)}`;
+  }
+  
+  updateCurrentTheme();
+  
+  function toggleTheme() {
+    currentThemeIndex = (currentThemeIndex + 1) % themeNames.length;
+    setTheme(themeNames[currentThemeIndex]);
+    updateCurrentTheme();
+  }
+  
+  document.getElementById('toggle_theme').addEventListener('click', toggleTheme);
+
+  // ##########################################################
 
 
 
@@ -598,3 +712,7 @@ function isOrWillCollide(o1, o2, o1_xChange, o1_yChange) {
 function getRandomNumber(min, max) {
   return (Math.random() * (max - min)) + min;
 }
+
+
+
+
