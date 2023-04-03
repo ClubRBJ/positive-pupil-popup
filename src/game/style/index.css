@@ -253,3 +253,13 @@ button {
     margin: 90px;
 }
 
+
+@media screen and (prefers-reduced-motion: reduce) {
+    .game-window {
+        background-image: url("../src/grass-still.png");
+    }
+    #actual_game {
+        background-image: url("../src/grass-still.png");
+    }
+}
+

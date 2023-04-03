@@ -142,7 +142,7 @@ function gameOver() {
     $('#actual_game').hide();
     $('#main_menu').show(); // shows the same main menu background as in the start
     $('#main_buttons').hide(); // hides the beginning menu buttons 
-    $('.game-window').css({'background-image': 'url("./src/grass.gif'}); 
+    $('.game-window').css({'background-image': 'url("./src/grass-still.png'}); 
     $('#game_over_menu').show(); // will display the end game message
     $('#final_score').html(score);
     $('#final_level').html(level);

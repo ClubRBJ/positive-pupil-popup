@@ -1,6 +1,3 @@
-
-
-
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
     console.log(sender.tab ?
@@ -27,6 +24,7 @@ chrome.runtime.onMessage.addListener(
   }
 );
 
+// chrome.browserAction.setIcon({ path: "./src/chrome/chrome-icon.js" });
 
 // function sendMessageToContentScript() {
 //   (async () => {
