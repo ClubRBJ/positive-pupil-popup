@@ -23,7 +23,7 @@
   
   body,
   button {
-      font-family: VT323;
+      font-family: 'Western', sans-serif;
   }
   button {
       font-size: xx-large;
@@ -235,6 +235,8 @@
 }
 
 #game_over_button {
+    background-color: sienna;
+    color: white;
     font-size: xxx-large;
 }
 

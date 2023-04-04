@@ -21,7 +21,7 @@ function disableButtons() {
  */
 function playGame() {
     // Open the game in a new window.
-    let openWindow = window.open("../game/index.html", "mywindow","location=1,toolbar=1,menubar=1,resizable=1,width=1500,height=1000");
+    let openWindow = window.open("../game/index.html", "mywindow","location=1,toolbar=1,menubar=1,resizable=1,width=1300,height=1000");
     
     // Disable the "play game" and "activity" buttons.
     disableButtons();
