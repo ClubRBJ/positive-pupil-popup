@@ -145,7 +145,7 @@ const themes = {
     '--background-color': '#f4f4f4',
     '--border-color': '#000',
     '--game-background-color': '#f4f4f4',
-    '--game-background-image': 'url("../src/huell.png")',
+    '--game-background-image': 'url("../src/huell.jpg")',
     '--font-color': '#000',
     '--danger-color': '#e41749',
     '--level-color': '#d1197b',
@@ -701,12 +701,12 @@ class Bull {
 // Spawns an Bull travelling from one border to another
 function spawn() {
   let bull = new Bull();
-  // if (AUDIO_SPAWN != "") {
-  //   var audio = new Audio(AUDIO_SPAWN);
-  //   portalVol = parseFloat(gameVolume)/100;
-  //   audio.volume  = portalVol;
-  //   audio.play();
-  // }
+  if (AUDIO_SPAWN != "") {
+    var audio = new Audio(AUDIO_SPAWN);
+    portalVol = parseFloat(gameVolume)/100;
+    audio.volume  = portalVol;
+    audio.play();
+  }
   setTimeout(spawn_helper(bull), 0);
 }
 
