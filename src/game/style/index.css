@@ -42,6 +42,7 @@
       background-color: var(--game-background-color);
       background-image: var(--game-background-image);
       background-size: 1280px 720px;
+      overflow: hidden;
   }
   #actual_game {
       height: 720px;

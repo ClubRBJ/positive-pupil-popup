@@ -13,6 +13,7 @@ let game_window;
 let game_screen;
 let onScreenAsteroid;
 let players_first_game = true;
+let players_first_game2 = true;
 let playerAlive = true;
 let asteroidInterval;
 let scoreInterval;
@@ -305,10 +306,16 @@ function splashScreen() {
 		'background-color': 'white'
 	});
 
-  setTimeout(() => {
+  if (players_first_game2) {
+    players_first_game2=false;
+    setTimeout(() => {
+      $('#splash_screen').hide();
+      startGame();
+    }, game_delay);
+  } else {
     $('#splash_screen').hide();
-		startGame();
-	}, game_delay);
+      startGame();
+  }
 }
 
 function startGame() {
@@ -427,22 +434,15 @@ function rocketMove() {
       rocket.attr("src", "src/player/cowboy_left.png");
     }
   }
-  else if (UP) {
+  if (UP) {
     var newPosition = parseInt(rocket.css("top")) - PERSON_SPEED;
 
     if (newPosition < 0) {
       newPosition = 0;
     } 
     rocket.css("top", newPosition);
-
-    // if (hasShield) {
-    //   rocket.attr("src","src/player/player_shielded_up.gif");
-    // } 
-    // else {
-    //   rocket.attr("src", "src/player/player_up.gif");
-    // }
   }
-  else if (RIGHT) {
+  if (RIGHT) {
     var newPosition = parseInt(rocket.css("left")) + PERSON_SPEED;
 
     if (newPosition > 1218) {
@@ -457,28 +457,14 @@ function rocketMove() {
       rocket.attr("src", "src/player/cowboy_right.png");
     }
   }
-  else if (DOWN) {
+  if (DOWN) {
     var newPosition = parseInt(rocket.css("top")) + PERSON_SPEED;
 
     if (newPosition > 658 ) {
       newPosition = 658;
     } 
     rocket.css("top", newPosition);
-
-    // if (hasShield) {
-    //   rocket.attr("src", "src/player/player_shielded_down.gif");
-    // } 
-    // else {
-    //   rocket.attr("src", "src/player/player_down.gif");
-    // }
   } 
-  // else {
-  //   if (hasShield) {
-  //     rocket.attr("src", "src/player/cowboy_left_cape.png");
-  //   } 
-  //   rocket.attr("src", "src/player/cowboy_left.png");
-  // }
-
 }
 
 // Keydown event handler
