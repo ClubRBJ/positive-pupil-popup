@@ -8,6 +8,18 @@
 // ============ Page Scoped Globals Here ============
 // ==================================================
 
+
+ENEMY_LEFT = "src/running-bull-left.png"
+ENEMY_RIGHT = "src/running-bull-right.png"
+PLAYER_LEFT = "src/player/cowboy_left.png"
+PLAYER_RIGHT = "src/player/cowboy_right.png"
+PLAYER_SHIELD_LEFT = "src/player/cowboy_left_cape.png"
+PLAYER_SHIELD_RIGHT = "src/player/cowboy_right_cape.png"
+AUDIO_COLLECT = "src/audio/collect.mp3"
+AUDIO_DIE = "src/audio/die.mp3"
+AUDIO_MUSIC = "src/audio/music.mp3"
+AUDIO_SPAWN = ""
+
 // Div Handlers
 let game_window;
 let game_screen;
@@ -46,7 +58,7 @@ let bull_speed_inc = 1.2;
 let level_inc = 1;
 let score_inc = 40;
 let danger_inc = 2;
-let music = new Audio('src/audio/music.mp3');
+var music = new Audio(AUDIO_MUSIC);
 
 // Movement Helpers
 var LEFT = false;
@@ -82,7 +94,18 @@ const themes = {
     '--slider-background-color': '#d3d3d3',
     '--slider-fill-color': 'opacity(0.7)',
     '--game-over-background-color': 'darkslateblue',
-    '--game-over-color': 'white'
+    '--game-over-color': 'white',
+    '--asteroid-left': 'url("../src/running-bull-left.png")',
+    '--asteroid-right': 'url("../src/running-bull-right.png")',
+    'ENEMY_LEFT': "src/running-bull-left.png",
+    'ENEMY_RIGHT': "src/running-bull-right.png",
+    'PLAYER_LEFT': "src/player/cowboy_left.png",
+    'PLAYER_RIGHT': "src/player/cowboy_right.png",
+    'PLAYER_SHIELD_LEFT': "src/player/cowboy_left_cape.png",
+    'PLAYER_SHIELD_RIGHT': "src/player/cowboy_right_cape.png",
+    'AUDIO_COLLECT': "src/audio/collect.mp3",
+    'AUDIO_DIE': "src/audio/die.mp3",
+    'AUDIO_MUSIC': "src/audio/music.mp3",
   },
   colorblind: {
     '--main-color': '#f1c232',
@@ -104,14 +127,25 @@ const themes = {
     '--slider-background-color': '#d3d3d3',
     '--slider-fill-color': 'opacity(0.7)',
     '--game-over-background-color': '#f1c232',
-    '--game-over-color': 'black'
+    '--game-over-color': 'black',
+    '--asteroid-left': 'url("../src/running-bull-left.png")',
+    '--asteroid-right': 'url("../src/running-bull-right.png")',
+    'ENEMY_LEFT': "src/running-bull-left.png",
+    'ENEMY_RIGHT': "src/running-bull-right.png",
+    'PLAYER_LEFT': "src/player/cowboy_left.png",
+    'PLAYER_RIGHT': "src/player/cowboy_right.png",
+    'PLAYER_SHIELD_LEFT': "src/player/cowboy_left_cape.png",
+    'PLAYER_SHIELD_RIGHT': "src/player/cowboy_right_cape.png",
+    'AUDIO_COLLECT': "src/audio/collect.mp3",
+    'AUDIO_DIE': "src/audio/die.mp3",
+    'AUDIO_MUSIC': "src/audio/music.mp3",
   },
   cool1: {
     '--main-color': '#fc7f03',
     '--background-color': '#f4f4f4',
     '--border-color': '#000',
     '--game-background-color': '#f4f4f4',
-    '--game-background-image': 'url("../src/arrowkeys.png")',
+    '--game-background-image': 'url("../src/huell.png")',
     '--font-color': '#000',
     '--danger-color': '#e41749',
     '--level-color': '#d1197b',
@@ -126,7 +160,20 @@ const themes = {
     '--slider-background-color': '#d3d3d3',
     '--slider-fill-color': 'opacity(0.7)',
     '--game-over-background-color': '#fc7f03',
-    '--game-over-color': '#000'
+    '--game-over-color': '#000',
+    '--asteroid-left': 'url("../src/running-bull-right.png")',
+    '--asteroid-right': 'url("../src/running-bull-right.png")',
+    'ENEMY_LEFT': "src/waltuh.png",
+    'ENEMY_RIGHT': "src/waltuh2.png",
+    'PLAYER_LEFT': "src/player/saul.webp",
+    'PLAYER_RIGHT': "src/player/saul.webp",
+    'PLAYER_SHIELD_LEFT': "src/player/walter.png",
+    'PLAYER_SHIELD_RIGHT': "src/player/walter.png",
+    '--player-width': '50px',
+    'AUDIO_COLLECT': "src/audio/collect.mp3",
+    'AUDIO_DIE': "src/audio/die.mp3",
+    'AUDIO_MUSIC': "src/audio/saul_theme.mp3",
+    'AUDIO_SPAWN': "src/audio/waltuh.mp3",
   },
 }
 
@@ -193,7 +240,25 @@ $(document).ready(function () {
     currentThemeIndex = (currentThemeIndex + 1) % themeNames.length;
     setTheme(themeNames[currentThemeIndex]);
     updateCurrentTheme();
+    setImages();
   }
+
+  function setImages() {
+    currentTheme = themeNames[currentThemeIndex];
+    // Each dict from themes[currentTheme] has a key of:
+    // ENEMY_LEFT, ENEMY_RIGHT, PLAYER_LEFT, PLAYER_RIGHT, PLAYER_SHIELD_LEFT, PLAYER_SHIELD_RIGHT
+    ENEMY_LEFT = themes[currentTheme]['ENEMY_LEFT'] ?? ENEMY_LEFT;
+    ENEMY_RIGHT = themes[currentTheme]['ENEMY_RIGHT'] ?? ENEMY_RIGHT;
+    PLAYER_LEFT = themes[currentTheme]['PLAYER_LEFT'] ?? PLAYER_LEFT;
+    PLAYER_RIGHT = themes[currentTheme]['PLAYER_RIGHT'] ?? PLAYER_RIGHT;
+    PLAYER_SHIELD_LEFT = themes[currentTheme]['PLAYER_SHIELD_LEFT'] ?? PLAYER_SHIELD_LEFT;
+    PLAYER_SHIELD_RIGHT = themes[currentTheme]['PLAYER_SHIELD_RIGHT'] ?? PLAYER_SHIELD_RIGHT;
+    AUDIO_COLLECT = themes[currentTheme]['AUDIO_COLLECT'] ?? AUDIO_COLLECT;
+    AUDIO_DIE = themes[currentTheme]['AUDIO_DIE'] ?? AUDIO_DIE;
+    AUDIO_MUSIC = themes[currentTheme]['AUDIO_MUSIC'] ?? AUDIO_MUSIC;
+    AUDIO_SPAWN = themes[currentTheme]['AUDIO_SPAWN'] ?? AUDIO_SPAWN;
+    music = new Audio(AUDIO_MUSIC);
+  }		  
   
   document.getElementById('toggle_theme').addEventListener('click', toggleTheme);
 
@@ -339,7 +404,7 @@ function sheepSpawn() {
 
 function portalCollision() {
   if (isColliding(cowboy, onScreenSheep)) {
-    var audio = new Audio('src/audio/collect.mp3');
+    var audio = new Audio(AUDIO_COLLECT);
     portalVol = parseFloat(gameVolume)/100;
     audio.volume  = portalVol;
     audio.play();
@@ -368,7 +433,7 @@ function shieldSpawn() {
 
 function shieldCollision() {
   if (isColliding(cowboy, onScreenShield)) {
-    var audio = new Audio('src/audio/collect.mp3');
+    var audio = new Audio(AUDIO_COLLECT);
     shieldVol = parseFloat(gameVolume)/100;
     audio.volume  = shieldVol;
     audio.play();
@@ -397,7 +462,7 @@ function endGame() {
   music.pause();
   music.currentTime = 0;
   cowboy.attr("src", "src/player/player_touched.gif");
-  var audio = new Audio('src/audio/die.mp3');
+  var audio = new Audio(AUDIO_DIE);
   deathVol = parseFloat(gameVolume)/100;
   audio.volume  = deathVol;
   audio.play();
@@ -422,11 +487,11 @@ function cowboyMove() {
     cowboy.css("left", newPosition);
 
     if (hasCape) {
-      cowboy.attr("src", "src/player/cowboy_left_cape.png");
+      cowboy.attr("src", PLAYER_SHIELD_LEFT);
       
     } 
     else {
-      cowboy.attr("src", "src/player/cowboy_left.png");
+      cowboy.attr("src", PLAYER_LEFT);
     }
   }
   if (UP) {
@@ -446,10 +511,10 @@ function cowboyMove() {
     cowboy.css("left", newPosition);
 
     if (hasCape) {
-      cowboy.attr("src", "src/player/cowboy_right_cape.png");
+      cowboy.attr("src", PLAYER_SHIELD_RIGHT);
     } 
     else {
-      cowboy.attr("src", "src/player/cowboy_right.png");
+      cowboy.attr("src", PLAYER_RIGHT);
     }
   }
   if (DOWN) {
@@ -488,7 +553,7 @@ class Bull {
       // let objectString = "<div id = 'a-" + currentBull + "' class = 'curBull' > <img src = 'src/bull.png'/></div>";
       // onScreenBull.append(objectString);
 
-      let imageSource = Math.random() < 0.5 ? "src/running-bull-left.png" : "src/running-bull-right.png";
+      let imageSource = Math.random() < 0.5 ? ENEMY_RIGHT : ENEMY_LEFT;
       let objectString = "<div id='a-" + currentBull + "'class = 'curBull' '><img src ='" + imageSource + "'/></div>";
       onScreenBull.append(objectString);
 
@@ -636,6 +701,12 @@ class Bull {
 // Spawns an Bull travelling from one border to another
 function spawn() {
   let bull = new Bull();
+  // if (AUDIO_SPAWN != "") {
+  //   var audio = new Audio(AUDIO_SPAWN);
+  //   portalVol = parseFloat(gameVolume)/100;
+  //   audio.volume  = portalVol;
+  //   audio.play();
+  // }
   setTimeout(spawn_helper(bull), 0);
 }
 
