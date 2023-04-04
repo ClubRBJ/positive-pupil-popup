@@ -50,6 +50,7 @@ let asteriod_speed_inc = 1.2;
 let level_inc = 1;
 let score_inc = 40;
 let danger_inc = 2;
+let music = new Audio('src/audio/music.mp3');
 
 // Movement Helpers
 var LEFT = false;
@@ -75,7 +76,6 @@ $(document).ready(function () {
   onScreenShield = $("#curShield");
   onScreenPlayer = $("#curPlayer");
   rocket = $("#rocket_img");
-
 
   // Event Listeners
   document.getElementById('play_button').addEventListener("click", beginGame);
@@ -151,7 +151,7 @@ function gameOver() {
 
 function splashScreen() {
   score = 0;
-  level = 1;
+  level = 0;
 
   switch (difficulty) { // sets the values given a selected difficulty. 
 	case "easy":
@@ -182,6 +182,11 @@ function splashScreen() {
 	$('#level_num').html(level);
 
   $('#actual_game').show(); // show actual_game HTML and CSS
+
+  musicVol = parseFloat(gameVolume)/100;
+  music.volume = musicVol;
+  music.play();
+
   game_window.css({
 		'background-color': 'white'
 	});
@@ -273,6 +278,8 @@ function asteroidCollision() {
 
 // function is called when the player dies 
 function endGame() {
+  music.pause();
+  music.currentTime = 0;
   rocket.attr("src", "src/player/player_touched.gif");
   var audio = new Audio('src/audio/die.mp3');
   deathVol = parseFloat(gameVolume)/100;
