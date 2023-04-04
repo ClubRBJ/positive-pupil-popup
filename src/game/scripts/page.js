@@ -11,43 +11,38 @@
 // Div Handlers
 let game_window;
 let game_screen;
-let onScreenAsteroid;
+let onScreenBull;
 let players_first_game = true;
 let players_first_game2 = true;
 let playerAlive = true;
-let asteroidInterval;
+let bullInterval;
 let scoreInterval;
 let playerInterval;
-let spaceship;
+let cowboy;
 let gameVolume = 50;
 
 // Difficulty Helpers'
 let difficulty = "normal";  
-let astProjectileSpeed = 3;        // easy: 1, norm: 3, hard: 5
-let astSpawnRate = 800;            // default: 800 for normal
-
+let bullProjectileSpeed = 3;        // easy: 1, norm: 3, hard: 5
+let bullSpawnRate = 800;            // default: 800 for normal
 
 // Game Timing Rates
-let shield_spawn_rate = 15000;
-let portal_spawn_rate = 20000;
+let cape_spawn_rate = 15000;
+let sheep_spawn_rate = 20000;
 let refresh_rate = 15;
 let dissapear_rate = 5000;
 let death_screen_rate = 2000;
 
 // Game Object Helpers
 let danger = 20;
-let currentAsteroid = 1;
-let AST_OBJECT_REFRESH_RATE = 15;
+let currentBull = 1;
+let BULL_OBJECT_REFRESH_RATE = 15;
 let maxPersonPosX = 1218;
 let maxPersonPosY = 658;
-let PERSON_SPEED = 5;                // Speed of the person
-let vaccineOccurrence = 20000;       // Vaccine spawns every 20 seconds
-let vaccineGone = 5000;              // Vaccine disappears in 5 seconds
-let maskOccurrence = 15000;          // Masks spawn every 15 seconds
-let maskGone = 5000;                 // Mask disappears in 5 seconds
+let PERSON_SPEED = 5;                // Speed of the person 
 let game_delay = 3000;    
-let hasShield = false;           // Delay in miliseconds: 3000 = 3 seconds
-let asteriod_speed_inc = 1.2;
+let hasCape = false;           // Delay in miliseconds: 3000 = 3 seconds
+let bull_speed_inc = 1.2;
 let level_inc = 1;
 let score_inc = 40;
 let danger_inc = 2;
@@ -150,11 +145,11 @@ $(document).ready(function () {
   // ====== Startup ====== 
   game_window = $('.game-window');
   game_screen = $("#actual_game");
-  onScreenAsteroid = $('.curAstroid');
-  onScreenPortal = $("#curPortal");
-  onScreenShield = $("#curShield");
+  onScreenBull = $('.curBull');
+  onScreenSheep = $("#curSheep");
+  onScreenShield = $("#curCape");
   onScreenPlayer = $("#curPlayer");
-  rocket = $("#rocket_img");
+  cowboy = $("#bull_img");
 
   // Event Listeners
   document.getElementById('play_button').addEventListener("click", beginGame);
@@ -253,7 +248,7 @@ function gameSettings(show) {
 
 function gameOver() {
   setTimeout(() => {
-    rocket.attr("src", "src/player/player.gif");
+    cowboy.attr("src", "src/player/player.gif");
     $('#actual_game').hide();
     $('#main_menu').show(); // shows the same main menu background as in the start
     $('#main_buttons').hide(); // hides the beginning menu buttons 
@@ -270,18 +265,18 @@ function splashScreen() {
 
   switch (difficulty) { // sets the values given a selected difficulty. 
 	case "easy":
-		astProjectileSpeed = 1;
-    astSpawnRate = 1000;
+		bullProjectileSpeed = 1;
+    bullSpawnRate = 1000;
     danger = 10;
 		break;
 	case "normal":
-		astProjectileSpeed = 3;
-    astSpawnRate = 800;
+		bullProjectileSpeed = 3;
+    bullSpawnRate = 800;
     danger = 20;
 		break;
 	case "hard":
-		astProjectileSpeed = 5;
-    astSpawnRate = 600;
+		bullProjectileSpeed = 5;
+    bullSpawnRate = 600;
     danger = 30;
 		break
 	}
@@ -319,39 +314,39 @@ function splashScreen() {
 }
 
 function startGame() {
-  asteroidInterval = setInterval(spawn, astSpawnRate);
+  bullInterval = setInterval(spawn, bullSpawnRate);
   scoreInterval = setInterval(() => $('#score_num').html(score += 40), 500);
-  playerInterval = setInterval(rocketMove, 15);
-  portalInterval = setInterval(portalSpawn, portal_spawn_rate);
-  shieldInterval = setInterval(shieldSpawn, shield_spawn_rate);
-  asteroidCollisionInterval = setInterval(asteroidCollision, refresh_rate);
+  playerInterval = setInterval(cowboyMove, 15);
+  sheepInterval = setInterval(sheepSpawn, sheep_spawn_rate);
+  capeInterval = setInterval(shieldSpawn, cape_spawn_rate);
+  bullCollisionInterval = setInterval(bullCollision, refresh_rate);
   
 }
 
-function portalSpawn() {
-  onScreenPortal.html("<img class='game_object' src='src/sheep.png'/>");
-  onScreenPortal.css('left', getRandomNumber(0, 1218));
-  onScreenPortal.css('top', getRandomNumber(0, 658));
+function sheepSpawn() {
+  onScreenSheep.html("<img class='game_object' src='src/sheep.png'/>");
+  onScreenSheep.css('left', getRandomNumber(0, 1218));
+  onScreenSheep.css('top', getRandomNumber(0, 658));
 
   // check if the player comes in contact with the portal
   portalCollisionInterval = setInterval(portalCollision, refresh_rate);
 
   setTimeout(() => {
-    onScreenPortal.empty();
+    onScreenSheep.empty();
     clearInterval(portalCollisionInterval)
   }, dissapear_rate)
 }
 
 function portalCollision() {
-  if (isColliding(rocket, onScreenPortal)) {
+  if (isColliding(cowboy, onScreenSheep)) {
     var audio = new Audio('src/audio/collect.mp3');
     portalVol = parseFloat(gameVolume)/100;
     audio.volume  = portalVol;
     audio.play();
     clearInterval(portalCollisionInterval);
-    onScreenPortal.empty();
+    onScreenSheep.empty();
     level += 1;
-    astProjectileSpeed *= 1.2;
+    bullProjectileSpeed *= 1.2;
     danger += 2;
     $('#danger_num').html(danger);
     $('#level_num').html(level)
@@ -372,23 +367,23 @@ function shieldSpawn() {
 }
 
 function shieldCollision() {
-  if (isColliding(rocket, onScreenShield)) {
+  if (isColliding(cowboy, onScreenShield)) {
     var audio = new Audio('src/audio/collect.mp3');
     shieldVol = parseFloat(gameVolume)/100;
     audio.volume  = shieldVol;
     audio.play();
     clearInterval(shieldCollisiontInterval);
     onScreenShield.empty();
-    hasShield = true
+    hasCape = true
   }
 }
 
-function asteroidCollision() {
-  // got the id from the asteroid class grabbing the asteroids children
+function bullCollision() {
+  // got the id from the bull class grabbing the bulls children
   $('[id^=a-]').each(function () {
-      if (isColliding(rocket, $(this))) {
-        if (hasShield) {
-          hasShield = false;
+      if (isColliding(cowboy, $(this))) {
+        if (hasCape) {
+          hasCape = false;
           $(this).remove()
         } else {
           endGame();
@@ -401,15 +396,15 @@ function asteroidCollision() {
 function endGame() {
   music.pause();
   music.currentTime = 0;
-  rocket.attr("src", "src/player/player_touched.gif");
+  cowboy.attr("src", "src/player/player_touched.gif");
   var audio = new Audio('src/audio/die.mp3');
   deathVol = parseFloat(gameVolume)/100;
   audio.volume  = deathVol;
   audio.play();
-  clearInterval(shieldInterval);
-  clearInterval(portalInterval);
+  clearInterval(capeInterval);
+  clearInterval(sheepInterval);
   clearInterval(playerInterval);
-  clearInterval(asteroidInterval);
+  clearInterval(bullInterval);
   clearInterval(scoreInterval)
   $('[id^=a-]').each(function () {
       $(this).remove()
@@ -417,53 +412,53 @@ function endGame() {
   gameOver();
 }
 
-function rocketMove() {
+function cowboyMove() {
   if (LEFT) {
-    var newPosition = parseInt(rocket.css("left")) - PERSON_SPEED;
+    var newPosition = parseInt(cowboy.css("left")) - PERSON_SPEED;
 
     if (newPosition < 0) {
       newPosition = 0;
     } 
-    rocket.css("left", newPosition);
+    cowboy.css("left", newPosition);
 
-    if (hasShield) {
-      rocket.attr("src", "src/player/cowboy_left_cape.png");
+    if (hasCape) {
+      cowboy.attr("src", "src/player/cowboy_left_cape.png");
       
     } 
     else {
-      rocket.attr("src", "src/player/cowboy_left.png");
+      cowboy.attr("src", "src/player/cowboy_left.png");
     }
   }
   if (UP) {
-    var newPosition = parseInt(rocket.css("top")) - PERSON_SPEED;
+    var newPosition = parseInt(cowboy.css("top")) - PERSON_SPEED;
 
     if (newPosition < 0) {
       newPosition = 0;
     } 
-    rocket.css("top", newPosition);
+    cowboy.css("top", newPosition);
   }
   if (RIGHT) {
-    var newPosition = parseInt(rocket.css("left")) + PERSON_SPEED;
+    var newPosition = parseInt(cowboy.css("left")) + PERSON_SPEED;
 
     if (newPosition > 1218) {
       newPosition = 1218;
     } 
-    rocket.css("left", newPosition);
+    cowboy.css("left", newPosition);
 
-    if (hasShield) {
-      rocket.attr("src", "src/player/cowboy_right_cape.png");
+    if (hasCape) {
+      cowboy.attr("src", "src/player/cowboy_right_cape.png");
     } 
     else {
-      rocket.attr("src", "src/player/cowboy_right.png");
+      cowboy.attr("src", "src/player/cowboy_right.png");
     }
   }
   if (DOWN) {
-    var newPosition = parseInt(rocket.css("top")) + PERSON_SPEED;
+    var newPosition = parseInt(cowboy.css("top")) + PERSON_SPEED;
 
     if (newPosition > 658 ) {
       newPosition = 658;
     } 
-    rocket.css("top", newPosition);
+    cowboy.css("top", newPosition);
   } 
 }
 
@@ -483,42 +478,42 @@ document.onkeyup = function (e) {
   if (e.key == 'ArrowDown') DOWN = false;
 }
 
-// Starter Code for randomly generating and moving an asteroid on screenonScreenPlayer
+// Starter Code for randomly generating and moving an bull on screenonScreenPlayer
 // Feel free to use and add additional methods to this class
-class Asteroid {
-  // constructs an Asteroid object
+class Bull {
+  // constructs an Bull object
   constructor() {
       /*------------------------Public Member Variables------------------------*/
-      // create a new Asteroid div and append it to DOM so it can be modified later
-      // let objectString = "<div id = 'a-" + currentAsteroid + "' class = 'curAstroid' > <img src = 'src/asteroid.png'/></div>";
-      // onScreenAsteroid.append(objectString);
+      // create a new Bull div and append it to DOM so it can be modified later
+      // let objectString = "<div id = 'a-" + currentBull + "' class = 'curBull' > <img src = 'src/bull.png'/></div>";
+      // onScreenBull.append(objectString);
 
       let imageSource = Math.random() < 0.5 ? "src/running-bull-left.png" : "src/running-bull-right.png";
-      let objectString = "<div id='a-" + currentAsteroid + "'class = 'curAstroid' '><img src ='" + imageSource + "'/></div>";
-      onScreenAsteroid.append(objectString);
+      let objectString = "<div id='a-" + currentBull + "'class = 'curBull' '><img src ='" + imageSource + "'/></div>";
+      onScreenBull.append(objectString);
 
-      // select id of this Asteroid
-      this.id = $('#a-' + currentAsteroid);
-      currentAsteroid++; // ensure each Asteroid has its own id
-      // current x, y position of this Asteroid
+      // select id of this Bull
+      this.id = $('#a-' + currentBull);
+      currentBull++; // ensure each Bull has its own id
+      // current x, y position of this Bull
       this.cur_x = 0; // number of pixels from right
       this.cur_y = 0; // number of pixels from top
 
       /*------------------------Private Member Variables------------------------*/
-      // member variables for how to move the Asteroid
+      // member variables for how to move the Bull
       this.x_dest = 0;
       this.y_dest = 0;
-      // member variables indicating when the Asteroid has reached the boarder
+      // member variables indicating when the Bull has reached the boarder
       this.hide_axis = 'x';
       this.hide_after = 0;
       this.sign_of_switch = 'neg';
-      // spawn an Asteroid at a random location on a random side of the board
-      this.#spawnAsteroid();
+      // spawn an Bull at a random location on a random side of the board
+      this.#spawnBull();
   }
 
   // Requires: called by the user
   // Modifies:
-  // Effects: return true if current Asteroid has reached its destination, i.e., it should now disappear
+  // Effects: return true if current Bull has reached its destination, i.e., it should now disappear
   //          return false otherwise
   hasReachedEnd() {
       if(this.hide_axis == 'x'){
@@ -550,21 +545,21 @@ class Asteroid {
 
   // Requires: called by the user
   // Modifies: cur_y, cur_x
-  // Effects: move this Asteroid 1 unit in its designated direction
+  // Effects: move this Bull 1 unit in its designated direction
   updatePosition() {
-      // ensures all asteroids travel at current level's speed
-      this.cur_y += this.y_dest * astProjectileSpeed;
-      this.cur_x += this.x_dest * astProjectileSpeed;
-      // update asteroid's css position
+      // ensures all bulls travel at current level's speed
+      this.cur_y += this.y_dest * bullProjectileSpeed;
+      this.cur_x += this.x_dest * bullProjectileSpeed;
+      // update bull's css position
       this.id.css('top', this.cur_y);
       this.id.css('right', this.cur_x);
   }
 
   // Requires: this method should ONLY be called by the constructor
   // Modifies: cur_x, cur_y, x_dest, y_dest, num_ticks, hide_axis, hide_after, sign_of_switch
-  // Effects: randomly determines an appropriate starting/ending location for this Asteroid
-  //          all asteroids travel at the same speed
-  #spawnAsteroid() {
+  // Effects: randomly determines an appropriate starting/ending location for this Bull
+  //          all bulls travel at the same speed
+  #spawnBull() {
       // REMARK: YOU DO NOT NEED TO KNOW HOW THIS METHOD'S SOURCE CODE WORKS
       let x = getRandomNumber(0, 1280);
       let y = getRandomNumber(0, 720);
@@ -580,11 +575,11 @@ class Asteroid {
           this.cur_y = floor;
           this.cur_x = x;
           let bottomOfScreen = game_screen.height();
-          num_ticks = Math.floor((bottomOfScreen + 64) / astProjectileSpeed);
+          num_ticks = Math.floor((bottomOfScreen + 64) / bullProjectileSpeed);
 
           this.x_dest = (game_screen.width() - x);
           this.x_dest = (this.x_dest - x)/num_ticks + getRandomNumber(-.5,.5);
-          this.y_dest = -astProjectileSpeed - getRandomNumber(0, .5);
+          this.y_dest = -bullProjectileSpeed - getRandomNumber(0, .5);
           this.hide_axis = 'y';
           this.hide_after = -64;
           this.sign_of_switch = 'neg';
@@ -593,11 +588,11 @@ class Asteroid {
           this.cur_y = ceiling;
           this.cur_x = x;
           let bottomOfScreen = game_screen.height();
-          num_ticks = Math.floor((bottomOfScreen + 64) / astProjectileSpeed);
+          num_ticks = Math.floor((bottomOfScreen + 64) / bullProjectileSpeed);
 
           this.x_dest = (game_screen.width() - x);
           this.x_dest = (this.x_dest - x)/num_ticks + getRandomNumber(-.5,.5);
-          this.y_dest = astProjectileSpeed + getRandomNumber(0, .5);
+          this.y_dest = bullProjectileSpeed + getRandomNumber(0, .5);
           this.hide_axis = 'y';
           this.hide_after = 784;
           this.sign_of_switch = 'pos';
@@ -606,9 +601,9 @@ class Asteroid {
           this.cur_y = y;
           this.cur_x = left;
           let bottomOfScreen = game_screen.width();
-          num_ticks = Math.floor((bottomOfScreen + 64) / astProjectileSpeed);
+          num_ticks = Math.floor((bottomOfScreen + 64) / bullProjectileSpeed);
 
-          this.x_dest = -astProjectileSpeed - getRandomNumber(0, .5);
+          this.x_dest = -bullProjectileSpeed - getRandomNumber(0, .5);
           this.y_dest = (game_screen.height() - y);
           this.y_dest = (this.y_dest - y)/num_ticks + getRandomNumber(-.5,.5);
           this.hide_axis = 'x';
@@ -619,42 +614,42 @@ class Asteroid {
           this.cur_y = y;
           this.cur_x = right;
           let bottomOfScreen = game_screen.width();
-          num_ticks = Math.floor((bottomOfScreen + 64) / astProjectileSpeed);
+          num_ticks = Math.floor((bottomOfScreen + 64) / bullProjectileSpeed);
 
-          this.x_dest = astProjectileSpeed + getRandomNumber(0, .5);
+          this.x_dest = bullProjectileSpeed + getRandomNumber(0, .5);
           this.y_dest = (game_screen.height() - y);
           this.y_dest = (this.y_dest - y)/num_ticks + getRandomNumber(-.5,.5);
           this.hide_axis = 'x';
           this.hide_after = 1344;
           this.sign_of_switch = 'pos';
       }
-      // show this Asteroid's initial position on screen
+      // show this Bull's initial position on screen
       this.id.css("top", this.cur_y);
       this.id.css("right", this.cur_x);
-      // normalize the speed s.t. all Asteroids travel at the same speed
+      // normalize the speed s.t. all Bulls travel at the same speed
       let speed = Math.sqrt((this.x_dest)*(this.x_dest) + (this.y_dest)*(this.y_dest));
       this.x_dest = this.x_dest / speed;
       this.y_dest = this.y_dest / speed;
   }
 }
 
-// Spawns an asteroid travelling from one border to another
+// Spawns an Bull travelling from one border to another
 function spawn() {
-  let asteroid = new Asteroid();
-  setTimeout(spawn_helper(asteroid), 0);
+  let bull = new Bull();
+  setTimeout(spawn_helper(bull), 0);
 }
 
-function spawn_helper(asteroid) {
-  let astermovement = setInterval(function () {
-    // update asteroid position on screen
-    asteroid.updatePosition();
+function spawn_helper(bull) {
+  let bullMovement = setInterval(function () {
+    // update bull position on screen
+    bull.updatePosition();
 
-    // determine whether asteroid has reached its end position, i.e., outside the game border
-    if (asteroid.hasReachedEnd()) {
-      asteroid.id.remove();
-      clearInterval(astermovement);
+    // determine whether Bull has reached its end position, i.e., outside the game border
+    if (bull.hasReachedEnd()) {
+      bull.id.remove();
+      clearInterval(bullMovement);
     }
-  }, AST_OBJECT_REFRESH_RATE);
+  }, BULL_OBJECT_REFRESH_RATE);
 }
 
 //===================================================

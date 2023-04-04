@@ -79,14 +79,14 @@
       font-size: 35px;
       color: var(--score-num-color);
   }
-  #rocket_img {
+  #bull_img {
       position: absolute;
       width: 30px;
       left: 600px;
       top: 300px;
       z-index: 9;
   }
-  .curAstroid {
+  .curBull {
       position: absolute;
       height: 42px;
       width: 42px;
@@ -94,14 +94,14 @@
       right: 0;
       top: 0;
   }
-  #curPortal,
-  #curShield,
+  #curSheep,
+  #curCape,
   .game_object {
       position: absolute;
       width: 40px;
       height: 40px;
   }
-  .curAstroid img {
+  .curBull img {
       position: relative;
       z-index: 10;
       height: 80px;
@@ -127,13 +127,13 @@
     color: var(--font-color);
 }
 /*  */
-#asteroid_left {
+#bull_left {
     height: 100px;
     content: url("../src/running-bull-right.png");
     float: left;
 }
 /*  */
-#asteroid_right {
+#bull_right {
     height: 100px;
     content: url("../src/running-bull-left.png");
     float: right;
