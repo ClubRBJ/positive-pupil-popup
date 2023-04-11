@@ -1,5 +1,5 @@
 :root {
-    --main-color: darkslateblue;
+    --main-color: black;
     --background-color: #eee;
     --border-color: gainsboro;
     --game-background-color: gainsboro;
@@ -9,16 +9,24 @@
     --level-color: red;
     --score-color: red;
     --score-num-color: red;
-    --button-background-color: darkslateblue;
-    --button-border-color: black;
+    --button-background-color: black;
+    --button-border-color: white;
     --button-font-color: white;
-    --settings-background-color: darkslateblue;
+    --settings-background-color: black;
     --settings-border-color: white;
     --settings-font-color: white;
     --slider-background-color: #d3d3d3;
     --slider-fill-color: opacity(0.7);
-    --game-over-background-color: darkslateblue;
+    --game-over-background-color: black;
     --game-over-color: white;
+    --settings-button-outline: 3px solid yellow;
+    --menu-bull-left: url("../src/running-bull-right.png");
+    --menu-bull-right: url("../src/running-bull-left.png");
+    --tutorial-bull: url("../src/running-bull-left.png");
+    --tutorial-sheep: url("../src/sheep.png");
+    --tutorial-cape: url("../src/red_cape.png");
+    --game_over_button_color: black;
+    --game_over_button_text: white;
   }
   
   body,
@@ -129,13 +137,13 @@
 /*  */
 #bull_left {
     height: 100px;
-    content: url("../src/running-bull-right.png");
+    content: var(--menu-bull-left);
     float: left;
 }
 /*  */
 #bull_right {
     height: 100px;
-    content: url("../src/running-bull-left.png");
+    content: var(--menu-bull-right);
     float: right;
 }
 /*  */
@@ -206,7 +214,7 @@
 }
 
 .chosen_difficulty {
-    outline: 3px solid yellow;
+    outline: var(--settings-button-outline);
 }
 
 #splash_screen {
@@ -236,8 +244,8 @@
 }
 
 #game_over_button {
-    background-color: sienna;
-    color: white;
+    background-color: var(--game_over_button_color);
+    color: var(--game_over_button_text);
     font-size: xxx-large;
 }
 
@@ -256,6 +264,24 @@
 #tutorial_img {
     width: 100px;
     height: 100px;
+}
+
+#tutorial_img_bull {
+    width: 150px;
+    height: 150px;
+    content: var(--tutorial-bull);
+}
+
+#tutorial_img_sheep {
+    width: 75px;
+    height: 75px;
+    content: var(--tutorial-sheep);
+}
+
+#tutorial_img_cape {
+    width: 75px;
+    height: 75px;
+    content: var(--tutorial-cape);
 }
 
 #tutorial_text {
