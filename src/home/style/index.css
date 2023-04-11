@@ -1,24 +1,3 @@
-<<<<<<< Updated upstream:src/home/index.css
-
-#play-game {
-=======
-/* #play-game {
->>>>>>> Stashed changes:src/home/style/index.css
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    text-align: center;
-    font-size: 20px;
-    width: 200px;
-    height: 50px;
-}
-
-#play-game:hover {
-    box-shadow: 0px 5px 0px -2px rgba(0,0,0,0.3);
-} */
-
 #play-game {
     position: relative; /* add a position property to allow for absolute positioning of pseudo-element */
     background-color: #007bff;
@@ -59,7 +38,6 @@
     background-color: #007bff;
     color: #fff;
     border: none;
-    /* padding: 10px 20px; */
     cursor: pointer;
     text-align: center;
     font-size: 18px;
@@ -105,7 +83,7 @@
     text-align: center;
 }
 
-h1{
+h1 {
     text-align: center;
 }
 
@@ -124,15 +102,27 @@ h1{
 #welcome-desc {
     font-size: 25px;
     text-align: center;
-    padding-left: 600px;
-    padding-right: 600px;
+    padding-left: 15%;
+    padding-right: 15%;
     padding-bottom: 20px;
+    width: 70%;
+    margin: 0 auto;
 }
+
 #message {
     text-align: center;
     font-size: 20px;
 }
 
+
+#game-warning {
+    text-align: center;
+    font-size: 20px;
+    color: red;
+    margin-left: 100px;
+    margin-right: 100px;
+    display: none;
+}
 
 p {
     text-align: center;
@@ -149,3 +139,9 @@ p {
   p::after {
     content: ")"
   }
+
+  @media screen and (prefers-reduced-motion: reduce) {
+    #game-warning {
+        display: inline-block;
+    }
+}

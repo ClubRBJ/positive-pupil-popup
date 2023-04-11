@@ -8,49 +8,57 @@
 // ============ Page Scoped Globals Here ============
 // ==================================================
 
+
+ENEMY_LEFT = "src/running-bull-left.png"
+ENEMY_RIGHT = "src/running-bull-right.png"
+PLAYER_LEFT = "src/player/cowboy_left.png"
+PLAYER_RIGHT = "src/player/cowboy_right.png"
+PLAYER_SHIELD_LEFT = "src/player/cowboy_left_cape.png"
+PLAYER_SHIELD_RIGHT = "src/player/cowboy_right_cape.png"
+AUDIO_COLLECT = "src/audio/collect.mp3"
+AUDIO_DIE = "src/audio/die.mp3"
+AUDIO_MUSIC = "src/audio/music.mp3"
+AUDIO_SPAWN = ""
+
 // Div Handlers
 let game_window;
 let game_screen;
-let onScreenAsteroid;
+let onScreenBull;
 let players_first_game = true;
+let players_first_game2 = true;
 let playerAlive = true;
-let asteroidInterval;
+let bullInterval;
 let scoreInterval;
 let playerInterval;
-let spaceship;
+let cowboy;
 let gameVolume = 50;
 
 // Difficulty Helpers'
 let difficulty = "normal";  
-let astProjectileSpeed = 3;        // easy: 1, norm: 3, hard: 5
-let astSpawnRate = 800;            // default: 800 for normal
-
+let bullProjectileSpeed = 3;        // easy: 1, norm: 3, hard: 5
+let bullSpawnRate = 800;            // default: 800 for normal
 
 // Game Timing Rates
-let shield_spawn_rate = 15000;
-let portal_spawn_rate = 20000;
+let cape_spawn_rate = 15000;
+let sheep_spawn_rate = 20000;
 let refresh_rate = 15;
 let dissapear_rate = 5000;
 let death_screen_rate = 2000;
 
 // Game Object Helpers
 let danger = 20;
-let currentAsteroid = 1;
-let AST_OBJECT_REFRESH_RATE = 15;
+let currentBull = 1;
+let BULL_OBJECT_REFRESH_RATE = 15;
 let maxPersonPosX = 1218;
 let maxPersonPosY = 658;
-let PERSON_SPEED = 5;                // Speed of the person
-let vaccineOccurrence = 20000;       // Vaccine spawns every 20 seconds
-let vaccineGone = 5000;              // Vaccine disappears in 5 seconds
-let maskOccurrence = 15000;          // Masks spawn every 15 seconds
-let maskGone = 5000;                 // Mask disappears in 5 seconds
+let PERSON_SPEED = 5;                // Speed of the person 
 let game_delay = 3000;    
-let hasShield = false;           // Delay in miliseconds: 3000 = 3 seconds
-let asteriod_speed_inc = 1.2;
+let hasCape = false;           // Delay in miliseconds: 3000 = 3 seconds
+let bull_speed_inc = 1.2;
 let level_inc = 1;
 let score_inc = 40;
 let danger_inc = 2;
-let music = new Audio('src/audio/music.mp3');
+var music = new Audio(AUDIO_MUSIC);
 
 // Movement Helpers
 var LEFT = false;
@@ -59,9 +67,143 @@ var UP = false;
 var DOWN = false;
 var touched = false;
 
+
+let currentThemeIndex = 0;
+
+
+// ==============================================
+// ============ Theme stuff =====================
+// ==============================================
+
+
+const themes = {
+  default: {
+    '--main-color': 'black',
+    '--background-color': '#eee',
+    '--border-color': 'gainsboro',
+    '--game-background-color': 'gainsboro',
+    '--game-background-image': 'url("../src/grass.gif")',
+    '--font-color': 'white',
+    '--danger-color': 'red',
+    '--level-color': 'red',
+    '--score-color': 'red',
+    '--score-num-color': 'red',
+    '--button-background-color': 'black',
+    '--button-border-color': 'white',
+    '--button-font-color': 'white',
+    '--settings-background-color': 'black',
+    '--settings-border-color': 'white',
+    '--settings-font-color': 'white',
+    '--slider-background-color': '#d3d3d3',
+    '--slider-fill-color': 'opacity(0.7)',
+    '--game-over-background-color': 'black',
+    '--game-over-color': 'white',
+    '--asteroid-left': 'url("../src/running-bull-left.png")',
+    '--asteroid-right': 'url("../src/running-bull-right.png")',
+    '--settings-button-outline': '3px solid yellow',
+    '--menu-bull-left': 'url("../src/running-bull-right.png")',
+    '--menu-bull-right': 'url("../src/running-bull-left.png")',
+    '--tutorial-bull': 'url("../src/running-bull-left.png")',
+    '--tutorial-sheep': 'url("../src/sheep.png")',
+    '--tutorial-cape': 'url("../src/red_cape.png")',
+    '--game_over_button_color': 'white',
+    '--game_over_button_text': 'black',
+    '--game_over_button_outline': 'white',
+    'ENEMY_LEFT': "src/running-bull-left.png",
+    'ENEMY_RIGHT': "src/running-bull-right.png",
+    'PLAYER_LEFT': "src/player/cowboy_left.png",
+    'PLAYER_RIGHT': "src/player/cowboy_right.png",
+    'PLAYER_SHIELD_LEFT': "src/player/cowboy_left_cape.png",
+    'PLAYER_SHIELD_RIGHT': "src/player/cowboy_right_cape.png",
+    'AUDIO_COLLECT': "src/audio/collect.mp3",
+    'AUDIO_DIE': "src/audio/die.mp3",
+    'AUDIO_MUSIC': "src/audio/music.mp3",
+  },
+  colorblind: {
+    '--main-color': 'cyan',
+    '--background-color': '#fffacd',
+    '--border-color': 'darkkhaki',
+    '--game-background-color': '#fffacd',
+    '--game-background-image': 'url("../src/grass.gif")',
+    '--font-color': 'black',
+    '--danger-color': 'cyan',
+    '--level-color': 'cyan',
+    '--score-color': 'cyan',
+    '--score-num-color': 'cyan',
+    '--button-background-color': 'cyan',
+    '--button-border-color': 'black',
+    '--button-font-color': 'black',
+    '--settings-background-color': '#f1c232',
+    '--settings-border-color': 'black',
+    '--settings-font-color': 'black',
+    '--slider-background-color': '#d3d3d3',
+    '--slider-fill-color': 'opacity(0.7)',
+    '--game-over-background-color': 'cyan',
+    '--game-over-color': 'black',
+    '--game_over_button_outline': 'black',
+    '--asteroid-left': 'url("../src/running-bull-yellow-left.png")',
+    '--asteroid-right': 'url("../src/running-bull-yellow-right.png")',
+    '--settings-button-outline': '3px solid darkgreen',
+    '--menu-bull-left': 'url("../src/running-bull-yellow-right.png")',
+    '--menu-bull-right': 'url("../src/running-bull-yellow-left.png")',
+    '--tutorial-bull': 'url("../src/running-bull-yellow-left.png")',
+    '--tutorial-sheep': 'url("../src/sheep.png")',
+    '--tutorial-cape': 'url("../src/blue_cape.png")',
+    '--game_over_button_color': '#f1c232',
+    '--game_over_button_text': 'black',
+    'ENEMY_LEFT': "src/running-bull-yellow-left.png",
+    'ENEMY_RIGHT': "src/running-bull-yellow-right.png",
+    'PLAYER_LEFT': "src/player/cowboy_left.png",
+    'PLAYER_RIGHT': "src/player/cowboy_right.png",
+    'PLAYER_SHIELD_LEFT': "src/player/cowboy_left_blue_cape.png",
+    'PLAYER_SHIELD_RIGHT': "src/player/cowboy_right_blue_cape.png",
+    'AUDIO_COLLECT': "src/audio/collect.mp3",
+    'AUDIO_DIE': "src/audio/die.mp3",
+    'AUDIO_MUSIC': "src/audio/music.mp3",
+  },
+  // cool1: {
+  //   '--main-color': '#fc7f03',
+  //   '--background-color': '#f4f4f4',
+  //   '--border-color': '#000',
+  //   '--game-background-color': '#f4f4f4',
+  //   '--game-background-image': 'url("../src/huell.jpg")',
+  //   '--font-color': '#000',
+  //   '--danger-color': '#e41749',
+  //   '--level-color': '#d1197b',
+  //   '--score-color': '#42b5dd',
+  //   '--score-num-color': '#000',
+  //   '--button-background-color': '#fc7f03',
+  //   '--button-border-color': '#000',
+  //   '--button-font-color': '#000',
+  //   '--settings-background-color': '#fc7f03',
+  //   '--settings-border-color': '#000',
+  //   '--settings-font-color': '#000',
+  //   '--slider-background-color': '#d3d3d3',
+  //   '--slider-fill-color': 'opacity(0.7)',
+  //   '--game-over-background-color': '#fc7f03',
+  //   '--game-over-color': '#000',
+  //   '--asteroid-left': 'url("../src/running-bull-right.png")',
+  //   '--asteroid-right': 'url("../src/running-bull-right.png")',
+  //   'ENEMY_LEFT': "src/waltuh.png",
+  //   'ENEMY_RIGHT': "src/waltuh2.png",
+  //   'PLAYER_LEFT': "src/player/saul.webp",
+  //   'PLAYER_RIGHT': "src/player/saul.webp",
+  //   'PLAYER_SHIELD_LEFT': "src/player/walter.png",
+  //   'PLAYER_SHIELD_RIGHT': "src/player/walter.png",
+  //   '--player-width': '50px',
+  //   'AUDIO_COLLECT': "src/audio/collect.mp3",
+  //   'AUDIO_DIE': "src/audio/die.mp3",
+  //   'AUDIO_MUSIC': "src/audio/saul_theme.mp3",
+  //   'AUDIO_SPAWN': "src/audio/waltuh.mp3",
+  // },
+}
+
 // ==============================================
 // ============ Functional Code Here ============
 // ==============================================
+
+
+
 
 
 
@@ -71,23 +213,77 @@ $(document).ready(function () {
   // ====== Startup ====== 
   game_window = $('.game-window');
   game_screen = $("#actual_game");
-  onScreenAsteroid = $('.curAstroid');
-  onScreenPortal = $("#curPortal");
-  onScreenShield = $("#curShield");
+  onScreenBull = $('.curBull');
+  onScreenSheep = $("#curSheep");
+  onScreenShield = $("#curCape");
   onScreenPlayer = $("#curPlayer");
-  rocket = $("#rocket_img");
+  cowboy = $("#bull_img");
 
   // Event Listeners
   document.getElementById('play_button').addEventListener("click", beginGame);
   document.getElementById('settings_menu').addEventListener("click", function() { 
     gameSettings(true);
   });
+  
   document.getElementById('settings_close_button').addEventListener("click", function() { 
     gameSettings(false);
   });
   document.getElementById('tutorial_button').addEventListener("click", beginGame);
   document.getElementById('game_over_button').addEventListener("click", gameRestart);
 
+  
+  
+  // ##########################################################
+  // Theme stuff
+  const themeNames = Object.keys(themes);
+  //let currentThemeIndex = 0;
+
+  function setTheme(theme) {
+    const themeVars = themes[theme];
+    if (themeVars) {
+      Object.keys(themeVars).forEach(key => {
+        document.documentElement.style.setProperty(key, themeVars[key]);
+      });
+    } else {
+      // throw error and log it
+      throw new Error(`Theme ${theme} not found`);
+    }
+  }
+  
+  function updateCurrentTheme() {
+    const currentThemeSpan = document.getElementById('current_theme');
+    currentThemeSpan.innerText = `Current Theme: ${themeNames[currentThemeIndex].charAt(0).toUpperCase() + themeNames[currentThemeIndex].slice(1)}`;
+  }
+  
+  updateCurrentTheme();
+  
+  function toggleTheme() {
+    currentThemeIndex = (currentThemeIndex + 1) % themeNames.length;
+    setTheme(themeNames[currentThemeIndex]);
+    updateCurrentTheme();
+    setImages();
+  }
+
+  function setImages() {
+    currentTheme = themeNames[currentThemeIndex];
+    // Each dict from themes[currentTheme] has a key of:
+    // ENEMY_LEFT, ENEMY_RIGHT, PLAYER_LEFT, PLAYER_RIGHT, PLAYER_SHIELD_LEFT, PLAYER_SHIELD_RIGHT
+    ENEMY_LEFT = themes[currentTheme]['ENEMY_LEFT'] ?? ENEMY_LEFT;
+    ENEMY_RIGHT = themes[currentTheme]['ENEMY_RIGHT'] ?? ENEMY_RIGHT;
+    PLAYER_LEFT = themes[currentTheme]['PLAYER_LEFT'] ?? PLAYER_LEFT;
+    PLAYER_RIGHT = themes[currentTheme]['PLAYER_RIGHT'] ?? PLAYER_RIGHT;
+    PLAYER_SHIELD_LEFT = themes[currentTheme]['PLAYER_SHIELD_LEFT'] ?? PLAYER_SHIELD_LEFT;
+    PLAYER_SHIELD_RIGHT = themes[currentTheme]['PLAYER_SHIELD_RIGHT'] ?? PLAYER_SHIELD_RIGHT;
+    AUDIO_COLLECT = themes[currentTheme]['AUDIO_COLLECT'] ?? AUDIO_COLLECT;
+    AUDIO_DIE = themes[currentTheme]['AUDIO_DIE'] ?? AUDIO_DIE;
+    AUDIO_MUSIC = themes[currentTheme]['AUDIO_MUSIC'] ?? AUDIO_MUSIC;
+    AUDIO_SPAWN = themes[currentTheme]['AUDIO_SPAWN'] ?? AUDIO_SPAWN;
+    music = new Audio(AUDIO_MUSIC);
+  }		  
+  
+  document.getElementById('toggle_theme').addEventListener('click', toggleTheme);
+
+  // ##########################################################
 
 
 
@@ -138,11 +334,11 @@ function gameSettings(show) {
 
 function gameOver() {
   setTimeout(() => {
-    rocket.attr("src", "src/player/player.gif");
+    cowboy.attr("src", "src/player/player.gif");
     $('#actual_game').hide();
     $('#main_menu').show(); // shows the same main menu background as in the start
     $('#main_buttons').hide(); // hides the beginning menu buttons 
-    $('.game-window').css({'background-image': 'url("./src/grass.gif'}); 
+    $('.game-window').css({'background-image': 'url("./src/grass-still.png'}); 
     $('#game_over_menu').show(); // will display the end game message
     $('#final_score').html(score);
     $('#final_level').html(level);
@@ -155,18 +351,18 @@ function splashScreen() {
 
   switch (difficulty) { // sets the values given a selected difficulty. 
 	case "easy":
-		astProjectileSpeed = 1;
-    astSpawnRate = 1000;
+		bullProjectileSpeed = 1;
+    bullSpawnRate = 1000;
     danger = 10;
 		break;
 	case "normal":
-		astProjectileSpeed = 3;
-    astSpawnRate = 800;
+		bullProjectileSpeed = 3;
+    bullSpawnRate = 800;
     danger = 20;
 		break;
 	case "hard":
-		astProjectileSpeed = 5;
-    astSpawnRate = 600;
+		bullProjectileSpeed = 5;
+    bullSpawnRate = 600;
     danger = 30;
 		break
 	}
@@ -191,46 +387,52 @@ function splashScreen() {
 		'background-color': 'white'
 	});
 
-  setTimeout(() => {
+  if (players_first_game2) {
+    players_first_game2=false;
+    setTimeout(() => {
+      $('#splash_screen').hide();
+      startGame();
+    }, game_delay);
+  } else {
     $('#splash_screen').hide();
-		startGame();
-	}, game_delay);
+      startGame();
+  }
 }
 
 function startGame() {
-  asteroidInterval = setInterval(spawn, astSpawnRate);
+  bullInterval = setInterval(spawn, bullSpawnRate);
   scoreInterval = setInterval(() => $('#score_num').html(score += 40), 500);
-  playerInterval = setInterval(rocketMove, 15);
-  portalInterval = setInterval(portalSpawn, portal_spawn_rate);
-  shieldInterval = setInterval(shieldSpawn, shield_spawn_rate);
-  asteroidCollisionInterval = setInterval(asteroidCollision, refresh_rate);
+  playerInterval = setInterval(cowboyMove, 15);
+  sheepInterval = setInterval(sheepSpawn, sheep_spawn_rate);
+  capeInterval = setInterval(shieldSpawn, cape_spawn_rate);
+  bullCollisionInterval = setInterval(bullCollision, refresh_rate);
   
 }
 
-function portalSpawn() {
-  onScreenPortal.html("<img class='game_object' src='src/sheep.png'/>");
-  onScreenPortal.css('left', getRandomNumber(0, 1218));
-  onScreenPortal.css('top', getRandomNumber(0, 658));
+function sheepSpawn() {
+  onScreenSheep.html("<img class='game_object' src='src/sheep.png'/>");
+  onScreenSheep.css('left', getRandomNumber(0, 1218));
+  onScreenSheep.css('top', getRandomNumber(0, 658));
 
   // check if the player comes in contact with the portal
-  portalCollisionInterval = setInterval(portalCollision, refresh_rate);
+  sheepCollisionInterval = setInterval(sheepCollision, refresh_rate);
 
   setTimeout(() => {
-    onScreenPortal.empty();
-    clearInterval(portalCollisionInterval)
+    onScreenSheep.empty();
+    clearInterval(sheepCollisionInterval)
   }, dissapear_rate)
 }
 
-function portalCollision() {
-  if (isColliding(rocket, onScreenPortal)) {
-    var audio = new Audio('src/audio/collect.mp3');
+function sheepCollision() {
+  if (isColliding(cowboy, onScreenSheep)) {
+    var audio = new Audio(AUDIO_COLLECT);
     portalVol = parseFloat(gameVolume)/100;
     audio.volume  = portalVol;
     audio.play();
-    clearInterval(portalCollisionInterval);
-    onScreenPortal.empty();
+    clearInterval(sheepCollisionInterval);
+    onScreenSheep.empty();
     level += 1;
-    astProjectileSpeed *= 1.2;
+    bullProjectileSpeed *= 1.2;
     danger += 2;
     $('#danger_num').html(danger);
     $('#level_num').html(level)
@@ -238,36 +440,40 @@ function portalCollision() {
 }
 
 function shieldSpawn() {
-  onScreenShield.html("<img class='game_object' src='src/red_cape.png'/>");
+  if (currentThemeIndex==0){
+    onScreenShield.html("<img class='game_object' src='src/red_cape.png'/>");
+  } else {
+    onScreenShield.html("<img class='game_object' src='src/blue_cape.png'/>");
+  }
   onScreenShield.css('left', getRandomNumber(0, 1218));
   onScreenShield.css('top', getRandomNumber(0, 658));
 
-  shieldCollisiontInterval = setInterval(shieldCollision, refresh_rate);
+  capeCollisiontInterval = setInterval(capeCollision, refresh_rate);
 
   setTimeout(() => {
     onScreenShield.empty();
-    clearInterval(shieldCollisiontInterval)
+    clearInterval(capeCollisiontInterval)
   }, dissapear_rate)
 }
 
-function shieldCollision() {
-  if (isColliding(rocket, onScreenShield)) {
-    var audio = new Audio('src/audio/collect.mp3');
+function capeCollision() {
+  if (isColliding(cowboy, onScreenShield)) {
+    var audio = new Audio(AUDIO_COLLECT);
     shieldVol = parseFloat(gameVolume)/100;
     audio.volume  = shieldVol;
     audio.play();
-    clearInterval(shieldCollisiontInterval);
+    clearInterval(capeCollisiontInterval);
     onScreenShield.empty();
-    hasShield = true
+    hasCape = true
   }
 }
 
-function asteroidCollision() {
-  // got the id from the asteroid class grabbing the asteroids children
+function bullCollision() {
+  // got the id from the bull class grabbing the bulls children
   $('[id^=a-]').each(function () {
-      if (isColliding(rocket, $(this))) {
-        if (hasShield) {
-          hasShield = false;
+      if (isColliding(cowboy, $(this))) {
+        if (hasCape) {
+          hasCape = false;
           $(this).remove()
         } else {
           endGame();
@@ -280,15 +486,15 @@ function asteroidCollision() {
 function endGame() {
   music.pause();
   music.currentTime = 0;
-  rocket.attr("src", "src/player/player_touched.gif");
-  var audio = new Audio('src/audio/die.mp3');
+  cowboy.attr("src", "src/player/player_touched.gif");
+  var audio = new Audio(AUDIO_DIE);
   deathVol = parseFloat(gameVolume)/100;
   audio.volume  = deathVol;
   audio.play();
-  clearInterval(shieldInterval);
-  clearInterval(portalInterval);
+  clearInterval(capeInterval);
+  clearInterval(sheepInterval);
   clearInterval(playerInterval);
-  clearInterval(asteroidInterval);
+  clearInterval(bullInterval);
   clearInterval(scoreInterval)
   $('[id^=a-]').each(function () {
       $(this).remove()
@@ -296,75 +502,54 @@ function endGame() {
   gameOver();
 }
 
-function rocketMove() {
+function cowboyMove() {
   if (LEFT) {
-    var newPosition = parseInt(rocket.css("left")) - PERSON_SPEED;
+    var newPosition = parseInt(cowboy.css("left")) - PERSON_SPEED;
 
     if (newPosition < 0) {
       newPosition = 0;
     } 
-    rocket.css("left", newPosition);
+    cowboy.css("left", newPosition);
 
-    if (hasShield) {
-      rocket.attr("src", "src/player/cowboy_left_cape.png");
+    if (hasCape) {
+      cowboy.attr("src", PLAYER_SHIELD_LEFT);
       
     } 
     else {
-      rocket.attr("src", "src/player/cowboy_left.png");
+      cowboy.attr("src", PLAYER_LEFT);
     }
   }
-  else if (UP) {
-    var newPosition = parseInt(rocket.css("top")) - PERSON_SPEED;
+  if (UP) {
+    var newPosition = parseInt(cowboy.css("top")) - PERSON_SPEED;
 
     if (newPosition < 0) {
       newPosition = 0;
     } 
-    rocket.css("top", newPosition);
-
-    // if (hasShield) {
-    //   rocket.attr("src","src/player/player_shielded_up.gif");
-    // } 
-    // else {
-    //   rocket.attr("src", "src/player/player_up.gif");
-    // }
+    cowboy.css("top", newPosition);
   }
-  else if (RIGHT) {
-    var newPosition = parseInt(rocket.css("left")) + PERSON_SPEED;
+  if (RIGHT) {
+    var newPosition = parseInt(cowboy.css("left")) + PERSON_SPEED;
 
     if (newPosition > 1218) {
       newPosition = 1218;
     } 
-    rocket.css("left", newPosition);
+    cowboy.css("left", newPosition);
 
-    if (hasShield) {
-      rocket.attr("src", "src/player/cowboy_right_cape.png");
+    if (hasCape) {
+      cowboy.attr("src", PLAYER_SHIELD_RIGHT);
     } 
     else {
-      rocket.attr("src", "src/player/cowboy_right.png");
+      cowboy.attr("src", PLAYER_RIGHT);
     }
   }
-  else if (DOWN) {
-    var newPosition = parseInt(rocket.css("top")) + PERSON_SPEED;
+  if (DOWN) {
+    var newPosition = parseInt(cowboy.css("top")) + PERSON_SPEED;
 
     if (newPosition > 658 ) {
       newPosition = 658;
     } 
-    rocket.css("top", newPosition);
-
-    // if (hasShield) {
-    //   rocket.attr("src", "src/player/player_shielded_down.gif");
-    // } 
-    // else {
-    //   rocket.attr("src", "src/player/player_down.gif");
-    // }
+    cowboy.css("top", newPosition);
   } 
-  // else {
-  //   if (hasShield) {
-  //     rocket.attr("src", "src/player/cowboy_left_cape.png");
-  //   } 
-  //   rocket.attr("src", "src/player/cowboy_left.png");
-  // }
-
 }
 
 // Keydown event handler
@@ -383,42 +568,42 @@ document.onkeyup = function (e) {
   if (e.key == 'ArrowDown') DOWN = false;
 }
 
-// Starter Code for randomly generating and moving an asteroid on screenonScreenPlayer
+// Starter Code for randomly generating and moving an bull on screenonScreenPlayer
 // Feel free to use and add additional methods to this class
-class Asteroid {
-  // constructs an Asteroid object
+class Bull {
+  // constructs an Bull object
   constructor() {
       /*------------------------Public Member Variables------------------------*/
-      // create a new Asteroid div and append it to DOM so it can be modified later
-      // let objectString = "<div id = 'a-" + currentAsteroid + "' class = 'curAstroid' > <img src = 'src/asteroid.png'/></div>";
-      // onScreenAsteroid.append(objectString);
+      // create a new Bull div and append it to DOM so it can be modified later
+      // let objectString = "<div id = 'a-" + currentBull + "' class = 'curBull' > <img src = 'src/bull.png'/></div>";
+      // onScreenBull.append(objectString);
 
-      let imageSource = Math.random() < 0.5 ? "src/running-bull-left.png" : "src/running-bull-right.png";
-      let objectString = "<div id='a-" + currentAsteroid + "'class = 'curAstroid' '><img src ='" + imageSource + "'/></div>";
-      onScreenAsteroid.append(objectString);
+      let imageSource = Math.random() < 0.5 ? ENEMY_RIGHT : ENEMY_LEFT;
+      let objectString = "<div id='a-" + currentBull + "'class = 'curBull' '><img src ='" + imageSource + "'/></div>";
+      onScreenBull.append(objectString);
 
-      // select id of this Asteroid
-      this.id = $('#a-' + currentAsteroid);
-      currentAsteroid++; // ensure each Asteroid has its own id
-      // current x, y position of this Asteroid
+      // select id of this Bull
+      this.id = $('#a-' + currentBull);
+      currentBull++; // ensure each Bull has its own id
+      // current x, y position of this Bull
       this.cur_x = 0; // number of pixels from right
       this.cur_y = 0; // number of pixels from top
 
       /*------------------------Private Member Variables------------------------*/
-      // member variables for how to move the Asteroid
+      // member variables for how to move the Bull
       this.x_dest = 0;
       this.y_dest = 0;
-      // member variables indicating when the Asteroid has reached the boarder
+      // member variables indicating when the Bull has reached the boarder
       this.hide_axis = 'x';
       this.hide_after = 0;
       this.sign_of_switch = 'neg';
-      // spawn an Asteroid at a random location on a random side of the board
-      this.#spawnAsteroid();
+      // spawn an Bull at a random location on a random side of the board
+      this.#spawnBull();
   }
 
   // Requires: called by the user
   // Modifies:
-  // Effects: return true if current Asteroid has reached its destination, i.e., it should now disappear
+  // Effects: return true if current Bull has reached its destination, i.e., it should now disappear
   //          return false otherwise
   hasReachedEnd() {
       if(this.hide_axis == 'x'){
@@ -450,21 +635,21 @@ class Asteroid {
 
   // Requires: called by the user
   // Modifies: cur_y, cur_x
-  // Effects: move this Asteroid 1 unit in its designated direction
+  // Effects: move this Bull 1 unit in its designated direction
   updatePosition() {
-      // ensures all asteroids travel at current level's speed
-      this.cur_y += this.y_dest * astProjectileSpeed;
-      this.cur_x += this.x_dest * astProjectileSpeed;
-      // update asteroid's css position
+      // ensures all bulls travel at current level's speed
+      this.cur_y += this.y_dest * bullProjectileSpeed;
+      this.cur_x += this.x_dest * bullProjectileSpeed;
+      // update bull's css position
       this.id.css('top', this.cur_y);
       this.id.css('right', this.cur_x);
   }
 
   // Requires: this method should ONLY be called by the constructor
   // Modifies: cur_x, cur_y, x_dest, y_dest, num_ticks, hide_axis, hide_after, sign_of_switch
-  // Effects: randomly determines an appropriate starting/ending location for this Asteroid
-  //          all asteroids travel at the same speed
-  #spawnAsteroid() {
+  // Effects: randomly determines an appropriate starting/ending location for this Bull
+  //          all bulls travel at the same speed
+  #spawnBull() {
       // REMARK: YOU DO NOT NEED TO KNOW HOW THIS METHOD'S SOURCE CODE WORKS
       let x = getRandomNumber(0, 1280);
       let y = getRandomNumber(0, 720);
@@ -480,11 +665,11 @@ class Asteroid {
           this.cur_y = floor;
           this.cur_x = x;
           let bottomOfScreen = game_screen.height();
-          num_ticks = Math.floor((bottomOfScreen + 64) / astProjectileSpeed);
+          num_ticks = Math.floor((bottomOfScreen + 64) / bullProjectileSpeed);
 
           this.x_dest = (game_screen.width() - x);
           this.x_dest = (this.x_dest - x)/num_ticks + getRandomNumber(-.5,.5);
-          this.y_dest = -astProjectileSpeed - getRandomNumber(0, .5);
+          this.y_dest = -bullProjectileSpeed - getRandomNumber(0, .5);
           this.hide_axis = 'y';
           this.hide_after = -64;
           this.sign_of_switch = 'neg';
@@ -493,11 +678,11 @@ class Asteroid {
           this.cur_y = ceiling;
           this.cur_x = x;
           let bottomOfScreen = game_screen.height();
-          num_ticks = Math.floor((bottomOfScreen + 64) / astProjectileSpeed);
+          num_ticks = Math.floor((bottomOfScreen + 64) / bullProjectileSpeed);
 
           this.x_dest = (game_screen.width() - x);
           this.x_dest = (this.x_dest - x)/num_ticks + getRandomNumber(-.5,.5);
-          this.y_dest = astProjectileSpeed + getRandomNumber(0, .5);
+          this.y_dest = bullProjectileSpeed + getRandomNumber(0, .5);
           this.hide_axis = 'y';
           this.hide_after = 784;
           this.sign_of_switch = 'pos';
@@ -506,9 +691,9 @@ class Asteroid {
           this.cur_y = y;
           this.cur_x = left;
           let bottomOfScreen = game_screen.width();
-          num_ticks = Math.floor((bottomOfScreen + 64) / astProjectileSpeed);
+          num_ticks = Math.floor((bottomOfScreen + 64) / bullProjectileSpeed);
 
-          this.x_dest = -astProjectileSpeed - getRandomNumber(0, .5);
+          this.x_dest = -bullProjectileSpeed - getRandomNumber(0, .5);
           this.y_dest = (game_screen.height() - y);
           this.y_dest = (this.y_dest - y)/num_ticks + getRandomNumber(-.5,.5);
           this.hide_axis = 'x';
@@ -519,42 +704,48 @@ class Asteroid {
           this.cur_y = y;
           this.cur_x = right;
           let bottomOfScreen = game_screen.width();
-          num_ticks = Math.floor((bottomOfScreen + 64) / astProjectileSpeed);
+          num_ticks = Math.floor((bottomOfScreen + 64) / bullProjectileSpeed);
 
-          this.x_dest = astProjectileSpeed + getRandomNumber(0, .5);
+          this.x_dest = bullProjectileSpeed + getRandomNumber(0, .5);
           this.y_dest = (game_screen.height() - y);
           this.y_dest = (this.y_dest - y)/num_ticks + getRandomNumber(-.5,.5);
           this.hide_axis = 'x';
           this.hide_after = 1344;
           this.sign_of_switch = 'pos';
       }
-      // show this Asteroid's initial position on screen
+      // show this Bull's initial position on screen
       this.id.css("top", this.cur_y);
       this.id.css("right", this.cur_x);
-      // normalize the speed s.t. all Asteroids travel at the same speed
+      // normalize the speed s.t. all Bulls travel at the same speed
       let speed = Math.sqrt((this.x_dest)*(this.x_dest) + (this.y_dest)*(this.y_dest));
       this.x_dest = this.x_dest / speed;
       this.y_dest = this.y_dest / speed;
   }
 }
 
-// Spawns an asteroid travelling from one border to another
+// Spawns an Bull travelling from one border to another
 function spawn() {
-  let asteroid = new Asteroid();
-  setTimeout(spawn_helper(asteroid), 0);
+  let bull = new Bull();
+  if (AUDIO_SPAWN != "") {
+    var audio = new Audio(AUDIO_SPAWN);
+    portalVol = parseFloat(gameVolume)/100;
+    audio.volume  = portalVol;
+    audio.play();
+  }
+  setTimeout(spawn_helper(bull), 0);
 }
 
-function spawn_helper(asteroid) {
-  let astermovement = setInterval(function () {
-    // update asteroid position on screen
-    asteroid.updatePosition();
+function spawn_helper(bull) {
+  let bullMovement = setInterval(function () {
+    // update bull position on screen
+    bull.updatePosition();
 
-    // determine whether asteroid has reached its end position, i.e., outside the game border
-    if (asteroid.hasReachedEnd()) {
-      asteroid.id.remove();
-      clearInterval(astermovement);
+    // determine whether Bull has reached its end position, i.e., outside the game border
+    if (bull.hasReachedEnd()) {
+      bull.id.remove();
+      clearInterval(bullMovement);
     }
-  }, AST_OBJECT_REFRESH_RATE);
+  }, BULL_OBJECT_REFRESH_RATE);
 }
 
 //===================================================
@@ -605,3 +796,7 @@ function isOrWillCollide(o1, o2, o1_xChange, o1_yChange) {
 function getRandomNumber(min, max) {
   return (Math.random() * (max - min)) + min;
 }
+
+
+
+
