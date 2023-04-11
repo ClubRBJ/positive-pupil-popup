@@ -410,21 +410,21 @@ function sheepSpawn() {
   onScreenSheep.css('top', getRandomNumber(0, 658));
 
   // check if the player comes in contact with the portal
-  portalCollisionInterval = setInterval(portalCollision, refresh_rate);
+  sheepCollisionInterval = setInterval(sheepCollision, refresh_rate);
 
   setTimeout(() => {
     onScreenSheep.empty();
-    clearInterval(portalCollisionInterval)
+    clearInterval(sheepCollisionInterval)
   }, dissapear_rate)
 }
 
-function portalCollision() {
+function sheepCollision() {
   if (isColliding(cowboy, onScreenSheep)) {
     var audio = new Audio(AUDIO_COLLECT);
     portalVol = parseFloat(gameVolume)/100;
     audio.volume  = portalVol;
     audio.play();
-    clearInterval(portalCollisionInterval);
+    clearInterval(sheepCollisionInterval);
     onScreenSheep.empty();
     level += 1;
     bullProjectileSpeed *= 1.2;
@@ -443,21 +443,21 @@ function shieldSpawn() {
   onScreenShield.css('left', getRandomNumber(0, 1218));
   onScreenShield.css('top', getRandomNumber(0, 658));
 
-  shieldCollisiontInterval = setInterval(shieldCollision, refresh_rate);
+  capeCollisiontInterval = setInterval(capeCollision, refresh_rate);
 
   setTimeout(() => {
     onScreenShield.empty();
-    clearInterval(shieldCollisiontInterval)
+    clearInterval(capeCollisiontInterval)
   }, dissapear_rate)
 }
 
-function shieldCollision() {
+function capeCollision() {
   if (isColliding(cowboy, onScreenShield)) {
     var audio = new Audio(AUDIO_COLLECT);
     shieldVol = parseFloat(gameVolume)/100;
     audio.volume  = shieldVol;
     audio.play();
-    clearInterval(shieldCollisiontInterval);
+    clearInterval(capeCollisiontInterval);
     onScreenShield.empty();
     hasCape = true
   }
