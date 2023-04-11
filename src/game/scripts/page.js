@@ -68,6 +68,9 @@ var DOWN = false;
 var touched = false;
 
 
+let currentThemeIndex = 0;
+
+
 // ==============================================
 // ============ Theme stuff =====================
 // ==============================================
@@ -88,7 +91,7 @@ const themes = {
     '--button-background-color': 'black',
     '--button-border-color': 'white',
     '--button-font-color': 'white',
-    '--settings-background-color': 'white',
+    '--settings-background-color': 'black',
     '--settings-border-color': 'white',
     '--settings-font-color': 'white',
     '--slider-background-color': '#d3d3d3',
@@ -103,8 +106,9 @@ const themes = {
     '--tutorial-bull': 'url("../src/running-bull-left.png")',
     '--tutorial-sheep': 'url("../src/sheep.png")',
     '--tutorial-cape': 'url("../src/red_cape.png")',
-    '--game_over_button_color': 'sienna',
-    '--game_over_button_text': 'white',
+    '--game_over_button_color': 'white',
+    '--game_over_button_text': 'black',
+    '--game_over_button_outline': 'white',
     'ENEMY_LEFT': "src/running-bull-left.png",
     'ENEMY_RIGHT': "src/running-bull-right.png",
     'PLAYER_LEFT': "src/player/cowboy_left.png",
@@ -122,10 +126,10 @@ const themes = {
     '--game-background-color': '#fffacd',
     '--game-background-image': 'url("../src/grass.gif")',
     '--font-color': 'black',
-    '--danger-color': 'black',
-    '--level-color': 'black',
-    '--score-color': 'black',
-    '--score-num-color': 'black',
+    '--danger-color': 'cyan',
+    '--level-color': 'cyan',
+    '--score-color': 'cyan',
+    '--score-num-color': 'cyan',
     '--button-background-color': 'cyan',
     '--button-border-color': 'black',
     '--button-font-color': 'black',
@@ -136,6 +140,7 @@ const themes = {
     '--slider-fill-color': 'opacity(0.7)',
     '--game-over-background-color': 'cyan',
     '--game-over-color': 'black',
+    '--game_over_button_outline': 'black',
     '--asteroid-left': 'url("../src/running-bull-yellow-left.png")',
     '--asteroid-right': 'url("../src/running-bull-yellow-right.png")',
     '--settings-button-outline': '3px solid darkgreen',
@@ -231,7 +236,7 @@ $(document).ready(function () {
   // ##########################################################
   // Theme stuff
   const themeNames = Object.keys(themes);
-  let currentThemeIndex = 0;
+  //let currentThemeIndex = 0;
 
   function setTheme(theme) {
     const themeVars = themes[theme];
@@ -435,11 +440,11 @@ function sheepCollision() {
 }
 
 function shieldSpawn() {
-  //if (colorblind){
-  //  onScreenShield.html("<img class='game_object' src='src/blue_cape.png'/>");
-  //} else {
+  if (currentThemeIndex==0){
     onScreenShield.html("<img class='game_object' src='src/red_cape.png'/>");
-  //}
+  } else {
+    onScreenShield.html("<img class='game_object' src='src/blue_cape.png'/>");
+  }
   onScreenShield.css('left', getRandomNumber(0, 1218));
   onScreenShield.css('top', getRandomNumber(0, 658));
 

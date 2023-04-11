@@ -25,8 +25,9 @@
     --tutorial-bull: url("../src/running-bull-left.png");
     --tutorial-sheep: url("../src/sheep.png");
     --tutorial-cape: url("../src/red_cape.png");
-    --game_over_button_color: black;
-    --game_over_button_text: white;
+    --game_over_button_color: white;
+    --game_over_button_text: black;
+    --game_over_button_outline: white;
   }
   
   body,
@@ -246,6 +247,7 @@
 #game_over_button {
     background-color: var(--game_over_button_color);
     color: var(--game_over_button_text);
+    outline: var(--game_over_button_outline);
     font-size: xxx-large;
 }
 
