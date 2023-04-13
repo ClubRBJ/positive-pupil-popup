@@ -323,7 +323,6 @@ function gameRestart() {
   // $('#main_menu').show();
   $('#main_buttons').show();
   $('#game_over_menu').hide();
-  $('.game-window').css({'background-image': 'url("./src/grass.gif'});
 }
 
 function gameSettings(show) {
